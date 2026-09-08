@@ -1,6 +1,14 @@
+// ============================================
+// LITTLE PET SHOP CATALOG - MAIN SCRIPT
+// ============================================
+
+// ============================================
+// DATA
+// ============================================
+
 const products = {
     lps: [
-        { id: 1, name: 'Cocker Spaniel #1', image: './images/lps-01', description: 'Perro juguetón y leal' },
+        { id: 1, name: 'Cocker Spaniel #1', image: '🐕', description: 'Perro juguetón y leal' },
         { id: 2, name: 'Gato Persa #5', image: '🐈', description: 'Felino elegante y tranquilo' },
         { id: 3, name: 'Conejo #12', image: '🐰', description: 'Conejito adorable y suave' },
         { id: 4, name: 'Hámster #7', image: '🐹', description: 'Pequeño y energético' },
@@ -112,25 +120,16 @@ function createProductCard(product) {
     card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', `${product.name}. ${product.description}. Haz clic para más información.`);
     
-    // Crear el contenedor de imagen con background-image
-    const imageContainer = document.createElement('div');
-    imageContainer.className = 'image-container';
-    imageContainer.style.backgroundImage = `url('${product.image}')`;
-    
-    const shimmer = document.createElement('div');
-    shimmer.className = 'shimmer-effect';
-    imageContainer.appendChild(shimmer);
-    
-    // Crear el contenido
-    const cardContent = document.createElement('div');
-    cardContent.className = 'card-content';
-    cardContent.innerHTML = `
-        <h3 class="product-name">${product.name}</h3>
-        <p class="product-desc">${product.description || 'Haz clic para consultar'}</p>
+    card.innerHTML = `
+        <div class="image-container">
+            <div class="image">${product.image}</div>
+            <div class="shimmer-effect"></div>
+        </div>
+        <div class="card-content">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-desc">${product.description || 'Haz clic para consultar'}</p>
+        </div>
     `;
-    
-    card.appendChild(imageContainer);
-    card.appendChild(cardContent);
     
     card.addEventListener('click', () => openModal(product));
     card.addEventListener('keypress', (e) => {
@@ -139,9 +138,6 @@ function createProductCard(product) {
             openModal(product);
         }
     });
-    
-    return card;
-}
     
     return card;
 }
