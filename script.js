@@ -38,17 +38,15 @@ const products = {
         { id: 28, name: 'Jirafas #27', image: 'images/lps-28.jpg', description: 'Alta y distinguida' },
         { id: 29, name: 'Cebra #17', image: 'images/lps-29.jpg', description: 'Rayada y veloz' },
         { id: 30, name: 'Rinoceronte #23', image: 'images/lps-30.jpg', description: 'Fuerte y poderoso' },
-        { id: 31, name: 'Lince #29', image: '🐆', description: 'Felino salvaje y ágil' },
     ],
     accesorios: [
-        { id: 1, name: 'Casa Acogedora Rosa', image: '🏠', description: 'Casa miniatura perfecta' },
-        { id: 2, name: 'Comedero Elegante', image: '🥣', description: 'Para alimentar mascotas' },
-        { id: 3, name: 'Cama de Espuma', image: '🛏️', description: 'Cómoda y acogedora' },
-        { id: 4, name: 'Collar Delicado', image: '✨', description: 'Accesorio brillante' },
-        { id: 5, name: 'Cesta Tejida', image: '🧺', description: 'Decorativa y útil' },
+        { id: 1, name: 'Casa Acogedora Rosa', image: 'images/acce-01.jpg', description: 'Casa miniatura perfecta' },
+        { id: 2, name: 'Comedero Elegante', image: 'images/acce-02.jpg', description: 'Para alimentar mascotas' },
+        { id: 3, name: 'Cama de Espuma', image: 'images/acce-03.jpg', description: 'Cómoda y acogedora' },
+
     ],
     otros: [
-        { id: 1, name: 'Set Accesorios Mini', image: '📦', description: 'Pack completo de accesorios' },
+        { id: 1, name: 'Set Accesorios Mini', image: 'images/otro-01,jpg', description: 'Pack completo de accesorios' },
     ],
     permuta: [
         { id: 1, name: 'Cocker Spaniel #42', image: '🐕', description: 'Perro marrón adorable' },
