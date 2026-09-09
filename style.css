@@ -632,3 +632,11 @@ body {
         color: #E0E0E0;
     }
 }
+/* Limitar el tamaño de la imagen dentro de la ventana flotante */
+#modal-image {
+    width: 150px;       /* Ancho perfecto para que no se vea gigante */
+    height: 150px;      /* Alto proporcional */
+    object-fit: cover;  /* Hace que la foto se adapte sin deformarse */
+    border-radius: var(--radius-md); /* Le da bordes suaves como tus tarjetas */
+    margin-bottom: 1.5rem; /* Separa la foto del título del producto */
+}
