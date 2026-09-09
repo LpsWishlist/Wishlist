@@ -9,7 +9,7 @@
 const products = {
     lps: [
         { id: 1, name: 'Cocker Spaniel #1', image: 'images/lps-01.jpg', description: 'Perro juguetón y leal' },
-        { id: 2, name: 'Gato Persa #5', image: '🐈', description: 'Felino elegante y tranquilo' },
+        { id: 2, name: 'Gato Persa #5', image: 'images/lps-02.jpg', description: 'Felino elegante y tranquilo' },
         { id: 3, name: 'Conejo #12', image: '🐰', description: 'Conejito adorable y suave' },
         { id: 4, name: 'Hámster #7', image: '🐹', description: 'Pequeño y energético' },
         { id: 5, name: 'Pájaro Azul #3', image: '🦜', description: 'Ave colorida y cantarina' },
