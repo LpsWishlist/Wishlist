@@ -27,9 +27,7 @@
 ![Texto descriptivo](images/lps-27.jpg)
 ![Texto descriptivo](images/lps-28.jpg)
 ![Texto descriptivo](images/lps-29.jpg)
-
 ![Texto descriptivo](images/acce-01.jpg)
 ![Texto descriptivo](images/acce-02.jpg)
 ![Texto descriptivo](images/acce-03.jpg)
-
 ![Texto descriptivo](images/otro-01.jpg)
