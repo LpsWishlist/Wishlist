@@ -151,7 +151,8 @@ function openModal(product) {
     selectedProduct = product;
     
     // Update modal content
-    modalImage.textContent = product.image;
+    modalImage.src = product.image;
+
     modalProductName.textContent = product.name;
     
     // Update question based on section
