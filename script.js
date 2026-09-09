@@ -46,7 +46,7 @@ const products = {
 
     ],
     otros: [
-        { id: 1, name: 'Set Accesorios Mini', image: 'images/otro-01,jpg', description: 'Pack completo de accesorios' },
+        { id: 1, name: 'Set Accesorios Mini', image: 'images/otro-01.jpg', description: 'Pack completo de accesorios' },
     ],
     permuta: [
         { id: 1, name: 'Cocker Spaniel #42', image: '🐕', description: 'Perro marrón adorable' },
