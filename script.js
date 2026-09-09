@@ -142,18 +142,16 @@ function createProductCard(product) {
     
     return card;
 }
-
-// ============================================
-// MODAL FUNCTIONS
-// ============================================
-
 function openModal(product) {
     selectedProduct = product;
     
     // Update modal content
-    modalImage.src = product.image;
-
+    modalImage.src = product.image; // Esto cambia la ruta de la foto
+    modalImage.alt = product.name;  // Esto añade el texto accesible
     modalProductName.textContent = product.name;
+    
+    // ... el resto de tu código de la función openModal sigue igual abajo
+
     
     // Update question based on section
     const questionText = currentSection === 'permuta' 
