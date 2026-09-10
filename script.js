@@ -1,10 +1,3 @@
-// ============================================
-// LITTLE PET SHOP CATALOG - MAIN SCRIPT
-// ============================================
-
-// ============================================
-// DATA
-// ============================================
 
 const products = {
     lps: [
@@ -103,7 +96,7 @@ function renderProducts() {
     productsGrid.innerHTML = '';
     
     currentProducts.forEach((product, index) => {
-        const card = createProductCard(product);
+        const card = createProductCard(product, index);
         productsGrid.appendChild(card);
         
         // Stagger animation
@@ -111,24 +104,54 @@ function renderProducts() {
     });
 }
 
-function createProductCard(product) {
+function createProductCard(product, index) {
     const card = document.createElement('div');
     card.className = 'card';
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', `${product.name}. ${product.description}. Haz clic para más información.`);
     
+    // ============================================
+    // EFECTO ORO PARA CHIHUAHUA (1)
+    // ============================================
+    if (product.name === 'Chihuahua (1)') {
+        card.classList.add('card--gold');
+    }
+    
+    // ============================================
+    // EFECTO 3D TIPO STEAM
+    // ============================================
+    card.classList.add('card--3d-enabled');
+    
     card.innerHTML = `
         <div class="image-container">
             <img class="image" src="${product.image}" alt="${product.name}">
-
             <div class="shimmer-effect"></div>
         </div>
         <div class="card-content">
             <h3 class="product-name">${product.name}</h3>
             <p class="product-desc">${product.description || 'Haz clic para consultar'}</p>
         </div>
+        <div class="tilt-glare"></div>
     `;
+    
+    // ============================================
+    // ETIQUETAS EN PERMUTA
+    // ============================================
+    if (currentSection === 'permuta') {
+        const badgeContainer = card.querySelector('.image-container');
+        const badge = document.createElement('div');
+        badge.className = 'permuta-badge';
+        
+        // Asignar etiquetas: 3 con "2024", 1 con "Alternativo"
+        if (index === 3) {
+            badge.textContent = 'Alternativo';
+        } else {
+            badge.textContent = '2024';
+        }
+        
+        badgeContainer.appendChild(badge);
+    }
     
     card.addEventListener('click', () => openModal(product));
     card.addEventListener('keypress', (e) => {
@@ -138,18 +161,83 @@ function createProductCard(product) {
         }
     });
     
+    // ============================================
+    // EFECTO 3D AL MOUSE - STEAM CARDS
+    // ============================================
+    if (!isMobile()) {
+        card.addEventListener('mousemove', (e) => {
+            handleCardTilt(card, e);
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            resetCardTilt(card);
+        });
+    }
+    
     return card;
 }
+
+// ============================================
+// 3D TILT EFFECT FUNCTIONS
+// ============================================
+
+function handleCardTilt(card, e) {
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const mouseX = e.clientX - centerX;
+    const mouseY = e.clientY - centerY;
+    
+    // Calcular ángulo de rotación basado en la posición del mouse
+    const rotateX = (mouseY / rect.height) * 15; // máx 15 grados
+    const rotateY = (mouseX / rect.width) * 15;
+    
+    // Aplicar transformación 3D
+    card.style.transform = `
+        perspective(1000px)
+        rotateX(${-rotateX}deg)
+        rotateY(${rotateY}deg)
+        scale(1.02)
+    `;
+    
+    // Actualizar posición del reflejo
+    const glare = card.querySelector('.tilt-glare');
+    if (glare) {
+        const glareX = (mouseX / rect.width) * 100;
+        const glareY = (mouseY / rect.height) * 100;
+        glare.style.background = `
+            radial-gradient(
+                circle at ${50 + glareX * 0.3}% ${50 + glareY * 0.3}%,
+                rgba(255, 255, 255, 0.5) 0%,
+                rgba(255, 255, 255, 0.2) 30%,
+                transparent 80%
+            )
+        `;
+    }
+}
+
+function resetCardTilt(card) {
+    card.style.transform = `
+        perspective(1000px)
+        rotateX(0deg)
+        rotateY(0deg)
+        scale(1)
+    `;
+    
+    const glare = card.querySelector('.tilt-glare');
+    if (glare) {
+        glare.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%)';
+    }
+}
+
 function openModal(product) {
     selectedProduct = product;
     
     // Update modal content
-    modalImage.src = product.image; // Esto cambia la ruta de la foto
-    modalImage.alt = product.name;  // Esto añade el texto accesible
+    modalImage.src = product.image;
+    modalImage.alt = product.name;
     modalProductName.textContent = product.name;
-    
-    // ... el resto de tu código de la función openModal sigue igual abajo
-
     
     // Update question based on section
     const questionText = currentSection === 'permuta' 
