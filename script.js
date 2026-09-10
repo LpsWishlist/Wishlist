@@ -125,11 +125,6 @@ function createProductCard(product, index) {
         card.classList.add('card--gold');
     }
     
-    // ============================================
-    // EFECTO 3D TIPO STEAM
-    // ============================================
-    card.classList.add('card--3d-enabled');
-    
     card.innerHTML = `
         <div class="image-container">
             <img class="image" src="${product.image}" alt="${product.name}">
@@ -139,7 +134,6 @@ function createProductCard(product, index) {
             <h3 class="product-name">${product.name}</h3>
             <p class="product-desc">${product.description || 'Haz clic para consultar'}</p>
         </div>
-        <div class="tilt-glare"></div>
     `;
     
     // ============================================
@@ -168,74 +162,21 @@ function createProductCard(product, index) {
         }
     });
     
-    // ============================================
-    // EFECTO 3D AL MOUSE - STEAM CARDS
-    // ============================================
-    if (!isMobile()) {
-        card.addEventListener('mousemove', (e) => {
-            handleCardTilt(card, e);
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            resetCardTilt(card);
-        });
-    }
-    
     return card;
 }
 
 // ============================================
-// 3D TILT EFFECT FUNCTIONS
+// SAD ANIMATION - NO BUTTON
 // ============================================
 
-function handleCardTilt(card, e) {
-    const rect = card.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+function triggerSadAnimation() {
+    // Agregar clase de animación triste al modal
+    modal.classList.add('modal--sad');
     
-    const mouseX = e.clientX - centerX;
-    const mouseY = e.clientY - centerY;
-    
-    // Calcular ángulo de rotación MÁS SUTIL
-    const rotateX = (mouseY / rect.height) * 5; // máx 5 grados (antes 15)
-    const rotateY = (mouseX / rect.width) * 5;  // máx 5 grados (antes 15)
-    
-    // Aplicar transformación 3D suave
-    card.style.transform = `
-        perspective(1000px)
-        rotateX(${-rotateX}deg)
-        rotateY(${rotateY}deg)
-        scale(1.005)
-    `;
-    
-    // Actualizar posición del reflejo de forma MÁS SUTIL
-    const glare = card.querySelector('.tilt-glare');
-    if (glare) {
-        const glareX = (mouseX / rect.width) * 100;
-        const glareY = (mouseY / rect.height) * 100;
-        glare.style.background = `
-            radial-gradient(
-                circle at ${50 + glareX * 0.2}% ${50 + glareY * 0.2}%,
-                rgba(255, 255, 255, 0.25) 0%,
-                rgba(255, 255, 255, 0.1) 40%,
-                transparent 70%
-            )
-        `;
-    }
-}
-
-function resetCardTilt(card) {
-    card.style.transform = `
-        perspective(1000px)
-        rotateX(0deg)
-        rotateY(0deg)
-        scale(1)
-    `;
-    
-    const glare = card.querySelector('.tilt-glare');
-    if (glare) {
-        glare.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(0, 0, 0, 0.05) 100%)';
-    }
+    // Remover la clase después de la animación
+    setTimeout(() => {
+        modal.classList.remove('modal--sad');
+    }, 1200);
 }
 
 function openModal(product) {
@@ -325,8 +266,13 @@ function attachEventListeners() {
     // YES button
     btnYes.addEventListener('click', sendToWhatsApp);
     
-    // NO button
-    btnNo.addEventListener('click', closeModal);
+    // NO button - con animación triste
+    btnNo.addEventListener('click', () => {
+        triggerSadAnimation();
+        setTimeout(() => {
+            closeModal();
+        }, 1200);
+    });
     
     // Keyboard close (ESC)
     document.addEventListener('keydown', (e) => {
@@ -458,4 +404,3 @@ function trackProductSelection(productName) {
 console.log('Little Pet Shop Catalog loaded successfully');
 console.log('Sections available:', Object.keys(products));
 console.log('Total products:', Object.values(products).reduce((sum, arr) => sum + arr.length, 0));
-
