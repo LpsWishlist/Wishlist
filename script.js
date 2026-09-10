@@ -49,10 +49,10 @@ const products = {
         { id: 1, name: 'Gorro Zanahoria (1606)', image: 'images/otro-01.jpg', description: 'Detalles de color naranja.' },
     ],
     permuta: [
-        { id: 1, name: 'Cocker Spaniel #42', image: '🐕', description: 'Perro marrón adorable' },
-        { id: 2, name: 'Gato Tabby #58', image: '🐈', description: 'Gato rayado hermoso' },
-        { id: 3, name: 'Conejo Blanco #19', image: '🐰', description: 'Conejo blanco níveo' },
-        { id: 4, name: 'Loro Verde #27', image: '🦜', description: 'Loro tropical exótico' },
+        { id: 1, name: 'Cocker Spaniel #42', image: 'images/nuv-01.jpg', description: 'Perro marrón adorable' },
+        { id: 2, name: 'Gato Tabby #58', image: 'images/nuv-02.jpg', description: 'Gato rayado hermoso' },
+        { id: 3, name: 'Conejo Blanco #19', image: 'images/nuv-03.jpg', description: 'Conejo blanco níveo' },
+        { id: 4, name: 'Loro Verde #27', image: 'images/nuv-04.jpg', description: 'Loro tropical exótico' },
     ],
 };
 
