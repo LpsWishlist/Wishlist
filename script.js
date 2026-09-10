@@ -1,3 +1,10 @@
+// ============================================
+// LITTLE PET SHOP CATALOG - MAIN SCRIPT
+// ============================================
+
+// ============================================
+// DATA
+// ============================================
 
 const products = {
     lps: [
@@ -189,29 +196,29 @@ function handleCardTilt(card, e) {
     const mouseX = e.clientX - centerX;
     const mouseY = e.clientY - centerY;
     
-    // Calcular ángulo de rotación basado en la posición del mouse
-    const rotateX = (mouseY / rect.height) * 15; // máx 15 grados
-    const rotateY = (mouseX / rect.width) * 15;
+    // Calcular ángulo de rotación MÁS SUTIL
+    const rotateX = (mouseY / rect.height) * 5; // máx 5 grados (antes 15)
+    const rotateY = (mouseX / rect.width) * 5;  // máx 5 grados (antes 15)
     
-    // Aplicar transformación 3D
+    // Aplicar transformación 3D suave
     card.style.transform = `
         perspective(1000px)
         rotateX(${-rotateX}deg)
         rotateY(${rotateY}deg)
-        scale(1.02)
+        scale(1.005)
     `;
     
-    // Actualizar posición del reflejo
+    // Actualizar posición del reflejo de forma MÁS SUTIL
     const glare = card.querySelector('.tilt-glare');
     if (glare) {
         const glareX = (mouseX / rect.width) * 100;
         const glareY = (mouseY / rect.height) * 100;
         glare.style.background = `
             radial-gradient(
-                circle at ${50 + glareX * 0.3}% ${50 + glareY * 0.3}%,
-                rgba(255, 255, 255, 0.5) 0%,
-                rgba(255, 255, 255, 0.2) 30%,
-                transparent 80%
+                circle at ${50 + glareX * 0.2}% ${50 + glareY * 0.2}%,
+                rgba(255, 255, 255, 0.25) 0%,
+                rgba(255, 255, 255, 0.1) 40%,
+                transparent 70%
             )
         `;
     }
@@ -227,7 +234,7 @@ function resetCardTilt(card) {
     
     const glare = card.querySelector('.tilt-glare');
     if (glare) {
-        glare.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%)';
+        glare.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(0, 0, 0, 0.05) 100%)';
     }
 }
 
@@ -451,3 +458,4 @@ function trackProductSelection(productName) {
 console.log('Little Pet Shop Catalog loaded successfully');
 console.log('Sections available:', Object.keys(products));
 console.log('Total products:', Object.values(products).reduce((sum, arr) => sum + arr.length, 0));
+
