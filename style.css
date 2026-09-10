@@ -366,7 +366,7 @@ body {
    ============================================ */
 
 .card.card--3d-enabled {
-    transition: transform 0.1s ease-out, box-shadow 0.4s var(--transition-smooth);
+    transition: transform 0.15s ease-out, box-shadow 0.4s var(--transition-smooth);
 }
 
 .card.card--3d-enabled .tilt-glare {
@@ -377,15 +377,15 @@ body {
     height: 100%;
     background: linear-gradient(
         135deg,
-        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.2) 0%,
         transparent 50%,
-        rgba(0, 0, 0, 0.1) 100%
+        rgba(0, 0, 0, 0.05) 100%
     );
     opacity: 0;
     pointer-events: none;
     z-index: 3;
     border-radius: var(--radius-md);
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, background 0.15s ease-out;
 }
 
 .card.card--3d-enabled:hover .tilt-glare {
@@ -756,14 +756,21 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* Disable 3D effect on touch devices */
+/* Adapt 3D effect for touch devices - VERY SUBTLE */
 @media (hover: none) and (pointer: coarse) {
     .card.card--3d-enabled {
-        transform: none;
+        transform: none !important;
     }
     
     .card.card--3d-enabled .tilt-glare {
+        opacity: 0 !important;
         display: none;
     }
+    
+    /* Keep the existing hover effect from original design */
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--color-primary-dark);
+    }
 }
-
