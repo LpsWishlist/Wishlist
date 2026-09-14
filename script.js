@@ -1,11 +1,3 @@
-// ============================================
-// LITTLE PET SHOP CATALOG - MAIN SCRIPT
-// ============================================
-
-// ============================================
-// DATA
-// ============================================
-
 const products = {
     lps: [
         { id: 1, name: 'Fox (673)', image: 'images/lps-01.jpg', description: 'Color marrón claro con detalles blancos y marrones que realzan su cara, cuerpo y cola, y sus orejas tienen un detalle puntiagudo de color rosa.' },
@@ -54,18 +46,22 @@ const products = {
         { id: 3, name: 'Elephant (243)', image: 'images/nuv-03.jpg', description: 'Elefante de la nueva generacion de LPS' },
         { id: 4, name: 'Collie', image: 'images/nuv-04.jpg', description: 'LPS alternativo de "Minilpsshop"' },
     ],
+    fotos: [
+        { id: 1, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+1' },
+        { id: 2, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+2' },
+        { id: 3, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+3' },
+        { id: 4, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+4' },
+        { id: 5, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+5' },
+    ],
 };
-
-// ============================================
-// STATE
-// ============================================
 
 let currentSection = 'lps';
 let selectedProduct = null;
+let photoZoomLevel = 1;
+let photoIsDragging = false;
+let photoDragStart = { x: 0, y: 0 };
+let photoOffset = { x: 0, y: 0 };
 
-// ============================================
-// DOM ELEMENTS
-// ============================================
 
 const navButtons = document.querySelectorAll('.nav-button');
 const productsGrid = document.getElementById('products-grid');
@@ -79,13 +75,25 @@ const modalQuestion = document.getElementById('modal-question');
 const btnYes = document.getElementById('btn-yes');
 const btnNo = document.getElementById('btn-no');
 
-// ============================================
-// INITIALIZATION
-// ============================================
+// Photo modal elements
+const photoModalOverlay = document.getElementById('photo-modal-overlay');
+const photoModal = document.getElementById('photo-modal');
+const photoModalClose = document.getElementById('photo-modal-close');
+const photoZoomImage = document.getElementById('photo-zoom-image');
+const photoZoomInBtn = document.getElementById('photo-zoom-in');
+const photoZoomOutBtn = document.getElementById('photo-zoom-out');
+const photoZoomResetBtn = document.getElementById('photo-zoom-reset');
+const photoZoomContainer = document.querySelector('.photo-zoom-container');
+
+// Floating tip elements
+const floatingTip = document.getElementById('floating-tip');
+const floatingTipClose = document.getElementById('floating-tip-close');
+
 
 function init() {
     renderProducts();
     attachEventListeners();
+    initFloatingTip();
     // Preload fonts
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap';
@@ -93,17 +101,19 @@ function init() {
     document.head.appendChild(link);
 }
 
-// ============================================
-// RENDER PRODUCTS
-// ============================================
 
 function renderProducts() {
+    if (currentSection === 'fotos') {
+        renderPhotos();
+        return;
+    }
+    
     const currentProducts = products[currentSection] || [];
     
     productsGrid.innerHTML = '';
     
     currentProducts.forEach((product, index) => {
-        const card = createProductCard(product, index);
+        const card = createProductCard(product);
         productsGrid.appendChild(card);
         
         // Stagger animation
@@ -111,23 +121,31 @@ function renderProducts() {
     });
 }
 
-function createProductCard(product, index) {
+function renderPhotos() {
+    const currentPhotos = products.fotos || [];
+    
+    productsGrid.innerHTML = '';
+    productsGrid.className = 'photos-grid';
+    
+    currentPhotos.forEach((photo, index) => {
+        const photoCard = createPhotoCard(photo);
+        productsGrid.appendChild(photoCard);
+        
+        // Stagger animation
+        photoCard.style.animation = `fadeIn 0.5s ease-out ${index * 0.05}s both`;
+    });
+}
+
+function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'card';
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', `${product.name}. ${product.description}. Haz clic para más información.`);
     
-    // ============================================
-    // EFECTO ORO PARA CHIHUAHUA (1)
-    // ============================================
-    if (product.name === 'Chihuahua (1)') {
-        card.classList.add('card--gold');
-    }
-    
     card.innerHTML = `
         <div class="image-container">
-            <img class="image" src="${product.image}" alt="${product.name}">
+            <div class="image">${product.image}</div>
             <div class="shimmer-effect"></div>
         </div>
         <div class="card-content">
@@ -135,24 +153,6 @@ function createProductCard(product, index) {
             <p class="product-desc">${product.description || 'Haz clic para consultar'}</p>
         </div>
     `;
-    
-    // ============================================
-    // ETIQUETAS EN PERMUTA
-    // ============================================
-    if (currentSection === 'permuta') {
-        const badgeContainer = card.querySelector('.image-container');
-        const badge = document.createElement('div');
-        badge.className = 'permuta-badge';
-        
-        // Asignar etiquetas: 3 con "2024", 1 con "Alternativo"
-        if (index === 3) {
-            badge.textContent = 'Alternativo';
-        } else {
-            badge.textContent = '2024';
-        }
-        
-        badgeContainer.appendChild(badge);
-    }
     
     card.addEventListener('click', () => openModal(product));
     card.addEventListener('keypress', (e) => {
@@ -165,26 +165,39 @@ function createProductCard(product, index) {
     return card;
 }
 
-// ============================================
-// SAD ANIMATION - NO BUTTON
-// ============================================
-
-function triggerSadAnimation() {
-    // Agregar clase de animación triste al modal
-    modal.classList.add('modal--sad');
+function createPhotoCard(photo) {
+    const card = document.createElement('div');
+    card.className = 'photo-card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `${photo.name}. Haz clic para ampliar.`);
     
-    // Remover la clase después de la animación
-    setTimeout(() => {
-        modal.classList.remove('modal--sad');
-    }, 1200);
+    card.innerHTML = `
+        <div class="photo-polaroid-image">
+            <img src="${photo.imageUrl}" alt="${photo.name}" loading="lazy">
+        </div>
+        <div class="photo-polaroid-text">
+            <p class="photo-polaroid-label">${photo.name}</p>
+        </div>
+    `;
+    
+    card.addEventListener('click', () => openPhotoModal(photo));
+    card.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openPhotoModal(photo);
+        }
+    });
+    
+    return card;
 }
+
 
 function openModal(product) {
     selectedProduct = product;
     
     // Update modal content
-    modalImage.src = product.image;
-    modalImage.alt = product.name;
+    modalImage.textContent = product.image;
     modalProductName.textContent = product.name;
     
     // Update question based on section
@@ -211,9 +224,71 @@ function closeModal() {
     document.body.style.overflow = '';
 }
 
-// ============================================
-// WHATSAPP INTEGRATION
-// ============================================
+
+function openPhotoModal(photo) {
+    photoZoomImage.src = photo.imageUrl;
+    photoZoomImage.alt = photo.name;
+    
+    // Reset zoom
+    photoZoomLevel = 1;
+    photoOffset = { x: 0, y: 0 };
+    updatePhotoZoom();
+    
+    // Show modal
+    photoModalOverlay.classList.add('active');
+    photoModal.focus();
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+function closePhotoModal() {
+    photoModalOverlay.classList.remove('active');
+    
+    // Restore body scroll
+    document.body.style.overflow = '';
+}
+
+function updatePhotoZoom() {
+    photoZoomImage.style.transform = `scale(${photoZoomLevel}) translate(${photoOffset.x}px, ${photoOffset.y}px)`;
+}
+
+function zoomInPhoto() {
+    photoZoomLevel = Math.min(photoZoomLevel + 0.25, 3);
+    updatePhotoZoom();
+}
+
+function zoomOutPhoto() {
+    photoZoomLevel = Math.max(photoZoomLevel - 0.25, 1);
+    if (photoZoomLevel === 1) {
+        photoOffset = { x: 0, y: 0 };
+    }
+    updatePhotoZoom();
+}
+
+function resetPhotoZoom() {
+    photoZoomLevel = 1;
+    photoOffset = { x: 0, y: 0 };
+    updatePhotoZoom();
+}
+
+
+function initFloatingTip() {
+    const tipDismissed = localStorage.getItem('lps-tip-dismissed');
+    
+    if (!tipDismissed) {
+        // Show tip after 8 seconds
+        setTimeout(() => {
+            floatingTip.classList.add('show');
+        }, 8000);
+    }
+    
+    floatingTipClose.addEventListener('click', () => {
+        floatingTip.classList.remove('show');
+        localStorage.setItem('lps-tip-dismissed', 'true');
+    });
+}
+
 
 function sendToWhatsApp() {
     if (!selectedProduct) return;
@@ -240,9 +315,6 @@ function sendToWhatsApp() {
     closeModal();
 }
 
-// ============================================
-// EVENT LISTENERS
-// ============================================
 
 function attachEventListeners() {
     // Navigation buttons
@@ -266,13 +338,8 @@ function attachEventListeners() {
     // YES button
     btnYes.addEventListener('click', sendToWhatsApp);
     
-    // NO button - con animación triste
-    btnNo.addEventListener('click', () => {
-        triggerSadAnimation();
-        setTimeout(() => {
-            closeModal();
-        }, 1200);
-    });
+    // NO button
+    btnNo.addEventListener('click', closeModal);
     
     // Keyboard close (ESC)
     document.addEventListener('keydown', (e) => {
@@ -280,11 +347,30 @@ function attachEventListeners() {
             closeModal();
         }
     });
+    
+    // Photo modal close
+    photoModalClose.addEventListener('click', closePhotoModal);
+    
+    // Photo modal overlay click
+    photoModalOverlay.addEventListener('click', (e) => {
+        if (e.target === photoModalOverlay) {
+            closePhotoModal();
+        }
+    });
+    
+    // Photo zoom buttons
+    photoZoomInBtn.addEventListener('click', zoomInPhoto);
+    photoZoomOutBtn.addEventListener('click', zoomOutPhoto);
+    photoZoomResetBtn.addEventListener('click', resetPhotoZoom);
+    
+    // Keyboard close for photo modal (ESC)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && photoModalOverlay.classList.contains('active')) {
+            closePhotoModal();
+        }
+    });
 }
 
-// ============================================
-// SECTION CHANGE
-// ============================================
 
 function changeSection(section) {
     if (section === currentSection) return;
@@ -304,9 +390,15 @@ function changeSection(section) {
         lps: 'LPS',
         accesorios: 'ACCESORIOS',
         otros: 'OTROS',
-        permuta: 'SE PERMUTA'
+        permuta: 'SE PERMUTA',
+        fotos: 'FOTOS'
     };
     sectionTitle.textContent = sectionLabels[section];
+    
+    // Reset grid class if coming from photos
+    if (section !== 'fotos') {
+        productsGrid.className = 'grid';
+    }
     
     // Render new products
     renderProducts();
@@ -315,9 +407,6 @@ function changeSection(section) {
     productsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
 
 // Detect if running on mobile
 function isMobile() {
@@ -340,10 +429,6 @@ window.addEventListener('resize', () => {
     }, 250);
 });
 
-// ============================================
-// PERFORMANCE & LOADING
-// ============================================
-
 // Use requestAnimationFrame for smooth animations
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
@@ -355,9 +440,7 @@ if (document.readyState === 'loading') {
     init();
 }
 
-// Lazy loading images if you replace emoji with actual images later
-// Uncomment when ready to use actual images
-/*
+
 function setupLazyLoading() {
     const images = document.querySelectorAll('.image');
     if ('IntersectionObserver' in window) {
@@ -373,11 +456,7 @@ function setupLazyLoading() {
         images.forEach(img => imageObserver.observe(img));
     }
 }
-*/
 
-// ============================================
-// ANALYTICS (Optional)
-// ============================================
 
 // Track section changes for analytics
 function trackSectionChange(section) {
@@ -397,9 +476,6 @@ function trackProductSelection(productName) {
     }
 }
 
-// ============================================
-// CONSOLE LOGGING (for debugging)
-// ============================================
 
 console.log('Little Pet Shop Catalog loaded successfully');
 console.log('Sections available:', Object.keys(products));
