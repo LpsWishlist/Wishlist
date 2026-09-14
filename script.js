@@ -47,11 +47,9 @@ const products = {
         { id: 4, name: 'Collie', image: 'images/nuv-04.jpg', description: 'LPS alternativo de "Minilpsshop"' },
     ],
     fotos: [
-        { id: 1, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+1' },
-        { id: 2, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+2' },
-        { id: 3, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+3' },
-        { id: 4, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+4' },
-        { id: 5, name: 'Foto', imageUrl: 'https://via.placeholder.com/300x300?text=Foto+5' },
+        { id: 1, name: 'Foto', imageUrl: 'images/fot-01.jpg' },
+        { id: 2, name: 'Foto', imageUrl: 'images/fot-02.jpg' },
+        { id: 3, name: 'Foto', imageUrl: 'images/fot-03.jpg' },
     ],
 };
 
