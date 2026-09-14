@@ -24,6 +24,7 @@
         <button class="nav-button" data-section="accesorios">ACCESORIOS</button>
         <button class="nav-button" data-section="otros">OTROS</button>
         <button class="nav-button" data-section="permuta">SE PERMUTA</button>
+        <button class="nav-button" data-section="fotos">FOTOS</button>
     </nav>
 
     <!-- Main Content -->
@@ -49,7 +50,7 @@
             </button>
 
             <div class="modal-content">
-                <img id="modal-image" alt="Imagen del producto">
+                <div class="modal-product-image" id="modal-image">🐕</div>
                 <h3 class="modal-product-name" id="modal-product-name">Nombre del Producto</h3>
 
                 <div class="question-container">
@@ -62,6 +63,60 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Modal para fotos con zoom -->
+    <div class="modal-overlay" id="photo-modal-overlay">
+        <div class="photo-modal" id="photo-modal">
+            <button class="modal-close" id="photo-modal-close" aria-label="Cerrar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <div class="photo-modal-content">
+                <div class="photo-zoom-container">
+                    <img id="photo-zoom-image" src="" alt="Foto ampliada" class="photo-zoom-image">
+                </div>
+                
+                <div class="photo-controls">
+                    <button id="photo-zoom-in" class="photo-zoom-btn" aria-label="Ampliar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                    <button id="photo-zoom-out" class="photo-zoom-btn" aria-label="Reducir">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                    <button id="photo-zoom-reset" class="photo-zoom-btn" aria-label="Restablecer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 4v6h-6"></path>
+                            <path d="M1 20v-6h6"></path>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36M20.49 15a9 9 0 0 1-14.85 3.36"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aviso flotante -->
+    <div class="floating-tip" id="floating-tip">
+        <p class="floating-tip-text">Puedes darle click a las imágenes sin problema.</p>
+        <button class="floating-tip-close" id="floating-tip-close" aria-label="Cerrar aviso">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
     </div>
 
     <footer class="footer">
