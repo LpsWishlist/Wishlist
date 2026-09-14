@@ -145,7 +145,7 @@ function createProductCard(product) {
     
     card.innerHTML = `
         <div class="image-container">
-            <div class="image">${product.image}</div>
+            <img class="image" src="${product.image}" alt="${product.name}">
             <div class="shimmer-effect"></div>
         </div>
         <div class="card-content">
