@@ -47,9 +47,9 @@ const products = {
         { id: 4, name: 'Collie', image: 'images/nuv-04.jpg', description: 'LPS alternativo de "Minilpsshop"' },
     ],
     fotos: [
-        { id: 1, name: 'Foto', imageUrl: 'images/fot-01.jpg' },
-        { id: 2, name: 'Foto', imageUrl: 'images/fot-02.jpg' },
-        { id: 3, name: 'Foto', imageUrl: 'images/fot-03.jpg' },
+        { id: 1, name: 'Estoy Leyendo..', imageUrl: 'images/fot-01.jpg' },
+        { id: 2, name: '¡Me gusta esto!', imageUrl: 'images/fot-02.jpg' },
+        { id: 3, name: '¿Donde estoy?', imageUrl: 'images/fot-03.jpg' },
     ],
 };
 
