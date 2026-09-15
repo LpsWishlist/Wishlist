@@ -316,7 +316,22 @@ function sendToWhatsApp() {
     // Close modal
     closeModal();
 }
+// ============================================
+// ANIMACIÓN CARA TRISTE (BOTÓN NO)
+// ============================================
 
+function showSadFace() {
+    if (!sadFaceOverlay) return;
+    
+    // Reinicia el temporizador si se presiona NO varias veces seguidas
+    clearTimeout(sadFaceTimer);
+    
+    sadFaceOverlay.classList.add('active');
+    
+    sadFaceTimer = setTimeout(() => {
+        sadFaceOverlay.classList.remove('active');
+    }, 2000); // Tiempo visible en pantalla (ms). Ajusta este número si quieres más o menos duración.
+}
 
 function attachEventListeners() {
     // Navigation buttons
@@ -396,6 +411,11 @@ function changeSection(section) {
         fotos: 'FOTOS'
     };
     sectionTitle.textContent = sectionLabels[section];
+    
+    // Efecto de brillo solo para LPS, ACCESORIOS y OTROS (SE PERMUTA queda igual que siempre)
+    const sectionsWithShine = ['lps', 'accesorios', 'otros'];
+    sectionTitle.classList.toggle('section-title--shine', sectionsWithShine.includes(section));
+    
     
     // Reset grid class if coming from photos
     if (section !== 'fotos') {
