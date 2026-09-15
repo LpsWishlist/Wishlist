@@ -895,3 +895,70 @@ body {
     border-radius: var(--radius-md); /* Le da bordes suaves como tus tarjetas */
     margin-bottom: 1.5rem; /* Separa la foto del título del producto */
 }
+/* ============================================
+   EFECTO DE BRILLO EN TÍTULOS (LPS, ACCESORIOS, OTROS)
+   Se activa/desactiva vía JS agregando/quitando esta clase
+   sobre #section-title. SE PERMUTA y FOTOS no la usan.
+   ============================================ */
+
+.section-title--shine {
+    color: var(--color-primary); /* fallback si el navegador no soporta el degradado en texto */
+    background-image: linear-gradient(
+        100deg,
+        var(--color-primary) 35%,
+        var(--color-primary-light) 48%,
+        #FFFFFF 52%,
+        var(--color-primary-light) 56%,
+        var(--color-primary) 70%
+    );
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleShine 6s linear infinite;
+}
+
+@keyframes titleShine {
+    to {
+        background-position: -250% 0;
+    }
+}
+
+/* ============================================
+   ANIMACIÓN "CARA TRISTE" AL PRESIONAR NO
+   Overlay independiente del modal: no cubre ni modifica
+   las imágenes/productos ni el resto de la sección.
+   ============================================ */
+
+.sad-face-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.sad-face-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sad-face-image {
+    width: clamp(70px, 18vw, 130px);
+    height: auto;
+    transform: translateY(12px) scale(0.88);
+    transition: transform 0.5s var(--transition-smooth);
+    user-select: none;
+}
+
+.sad-face-overlay.active .sad-face-image {
+    transform: translateY(0) scale(1);
+}
