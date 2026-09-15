@@ -50,6 +50,8 @@ const products = {
         { id: 1, name: 'Estoy Leyendo..', imageUrl: 'images/fot-01.jpg' },
         { id: 2, name: '¡Me gusta esto!', imageUrl: 'images/fot-02.jpg' },
         { id: 3, name: '¿Donde estoy?', imageUrl: 'images/fot-03.jpg' },
+        { id: 4, name: 'Nueva foto', imageUrl: 'images/fot-04.jpg' },
+        { id: 5, name: 'Nueva foto', imageUrl: 'images/fot-05.jpg' },
     ],
 };
 
@@ -502,3 +504,57 @@ function trackProductSelection(productName) {
 console.log('Little Pet Shop Catalog loaded successfully');
 console.log('Sections available:', Object.keys(products));
 console.log('Total products:', Object.values(products).reduce((sum, arr) => sum + arr.length, 0));
+
+
+// ============================================
+// ARRASTRAR PARA VER LA FOTO AMPLIADA (cuando hay zoom aplicado)
+// Usa las variables photoIsDragging / photoDragStart / photoOffset
+// que ya estaban declaradas arriba, y updatePhotoZoom() ya existente.
+// ============================================
+
+function attachPhotoDragListeners() {
+    if (!photoZoomImage) return;
+
+    const startDrag = (x, y) => {
+        if (photoZoomLevel <= 1) return;
+        photoIsDragging = true;
+        photoDragStart = { x: x - photoOffset.x, y: y - photoOffset.y };
+        photoZoomImage.style.cursor = 'grabbing';
+    };
+
+    const moveDrag = (x, y) => {
+        if (!photoIsDragging) return;
+        const maxOffset = (photoZoomLevel - 1) * 120;
+        let nextX = x - photoDragStart.x;
+        let nextY = y - photoDragStart.y;
+        nextX = Math.max(-maxOffset, Math.min(maxOffset, nextX));
+        nextY = Math.max(-maxOffset, Math.min(maxOffset, nextY));
+        photoOffset = { x: nextX, y: nextY };
+        updatePhotoZoom();
+    };
+
+    const endDrag = () => {
+        photoIsDragging = false;
+        photoZoomImage.style.cursor = '';
+    };
+
+    photoZoomImage.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startDrag(e.clientX, e.clientY);
+    });
+    window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+    window.addEventListener('mouseup', endDrag);
+
+    photoZoomImage.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        startDrag(touch.clientX, touch.clientY);
+    }, { passive: true });
+    photoZoomImage.addEventListener('touchmove', (e) => {
+        if (!photoIsDragging) return;
+        const touch = e.touches[0];
+        moveDrag(touch.clientX, touch.clientY);
+    }, { passive: true });
+    photoZoomImage.addEventListener('touchend', endDrag);
+}
+
+attachPhotoDragListeners();
