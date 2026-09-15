@@ -50,8 +50,6 @@ const products = {
         { id: 1, name: 'Estoy Leyendo..', imageUrl: 'images/fot-01.jpg' },
         { id: 2, name: '¡Me gusta esto!', imageUrl: 'images/fot-02.jpg' },
         { id: 3, name: '¿Donde estoy?', imageUrl: 'images/fot-03.jpg' },
-        { id: 4, name: 'Nueva foto', imageUrl: 'images/fot-04.jpg' },
-        { id: 5, name: 'Nueva foto', imageUrl: 'images/fot-05.jpg' },
     ],
 };
 
