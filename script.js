@@ -63,7 +63,6 @@ let photoZoomLevel = 1;
 let photoIsDragging = false;
 let photoDragStart = { x: 0, y: 0 };
 let photoOffset = { x: 0, y: 0 };
-let sadFaceTimer = null;
 
 
 const navButtons = document.querySelectorAll('.nav-button');
@@ -91,10 +90,6 @@ const photoZoomContainer = document.querySelector('.photo-zoom-container');
 // Floating tip elements
 const floatingTip = document.getElementById('floating-tip');
 const floatingTipClose = document.getElementById('floating-tip-close');
-
-// Sad face overlay elements
-const sadFaceOverlay = document.getElementById('sad-face-overlay');
-const sadFaceImage = document.getElementById('sad-face-image');
 
 
 function init() {
@@ -364,13 +359,8 @@ function attachEventListeners() {
     // YES button
     btnYes.addEventListener('click', sendToWhatsApp);
     
-    // NO button - Mostrar cara triste primero, luego cerrar
-    btnNo.addEventListener('click', () => {
-        showSadFace();
-        setTimeout(() => {
-            closeModal();
-        }, 600); // Espera a que empiece la animación antes de cerrar
-    });
+    // NO button
+    btnNo.addEventListener('click', closeModal);
     
     // Keyboard close (ESC)
     document.addEventListener('keydown', (e) => {
