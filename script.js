@@ -45,6 +45,10 @@ const products = {
         { id: 2, name: 'Baboon (244)', image: 'images/nuv-02.jpg', description: 'Mono color rosado con una linda chaqueta "personal"' },
         { id: 3, name: 'Elephant (243)', image: 'images/nuv-03.jpg', description: 'Elefante de la nueva generacion de LPS' },
         { id: 4, name: 'Collie', image: 'images/nuv-04.jpg', description: 'LPS alternativo de "Minilpsshop"' },
+        { id: 4, name: 'Collie', image: 'images/lps-31.jpg', description: 'LPS alternativo de "Minilpsshop"' },
+        { id: 4, name: 'Collie', image: 'images/lps-32.jpg', description: 'LPS alternativo de "Minilpsshop"' },
+        { id: 4, name: 'Collie', image: 'images/lps-33.jpg', description: 'LPS alternativo de "Minilpsshop"' },
+        { id: 4, name: 'Collie', image: 'images/lps-34.jpg', description: 'LPS alternativo de "Minilpsshop"' },
     ],
     fotos: [
         { id: 1, name: 'Estoy Leyendo..', imageUrl: 'images/fot-01.jpg' },
