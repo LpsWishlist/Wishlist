@@ -18,6 +18,32 @@
         </div>
     </header>
 
+    <!-- Hamburger Menu Button (Mobile) -->
+    <button class="hamburger-menu" aria-label="Abrir menú" aria-expanded="false">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </button>
+
+    <!-- Mobile Menu Backdrop -->
+    <div class="mobile-menu-backdrop" id="mobile-menu-backdrop"></div>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-content">
+            <button class="mobile-menu-item" data-section="lps">LPS</button>
+            <button class="mobile-menu-item" data-section="accesorios">ACCESORIOS</button>
+            <button class="mobile-menu-item" data-section="otros">OTROS</button>
+            <button class="mobile-menu-item" data-section="permuta">SE PERMUTA</button>
+            <button class="mobile-menu-item" data-section="fotos">FOTOS</button>
+            <div class="mobile-menu-separator"></div>
+            <button class="mobile-menu-whatsapp" aria-label="Contactar por WhatsApp">
+                <span>WhatsApp</span>
+                <span class="whatsapp-icon">💬</span>
+            </button>
+        </div>
+    </nav>
+
     <!-- Navigation -->
     <nav class="nav">
         <button class="nav-button nav-button--active" data-section="lps">LPS</button>
@@ -67,7 +93,7 @@
 
     <!-- Overlay de animación "cara triste" al presionar NO (LPS, ACCESORIOS, OTROS, SE PERMUTA) -->
     <div class="sad-face-overlay" id="sad-face-overlay" aria-hidden="true">
-        <img src="image/triste-1" alt="" class="sad-face-image" id="sad-face-image" onerror="this.style.display='none'">
+        <img src="image/triste-1.png" alt="" class="sad-face-image" id="sad-face-image" onerror="this.style.display='none'">
     </div>
 
     <!-- Modal de Fotos: se abre al hacer clic en cualquier foto de la sección FOTOS -->
