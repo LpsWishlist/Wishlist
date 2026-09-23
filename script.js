@@ -63,7 +63,10 @@ let photoZoomLevel = 1;
 let photoIsDragging = false;
 let photoDragStart = { x: 0, y: 0 };
 let photoOffset = { x: 0, y: 0 };
+let sadFaceTimer = null;
 
+// WhatsApp configuration
+const WHATSAPP_PHONE = '56996467214';
 
 const navButtons = document.querySelectorAll('.nav-button');
 const productsGrid = document.getElementById('products-grid');
@@ -76,6 +79,10 @@ const modalProductName = document.getElementById('modal-product-name');
 const modalQuestion = document.getElementById('modal-question');
 const btnYes = document.getElementById('btn-yes');
 const btnNo = document.getElementById('btn-no');
+
+// Sad face overlay elements
+const sadFaceOverlay = document.getElementById('sad-face-overlay');
+const sadFaceImage = document.getElementById('sad-face-image');
 
 // Photo modal elements
 const photoModalOverlay = document.getElementById('photo-modal-overlay');
@@ -91,11 +98,19 @@ const photoZoomContainer = document.querySelector('.photo-zoom-container');
 const floatingTip = document.getElementById('floating-tip');
 const floatingTipClose = document.getElementById('floating-tip-close');
 
+// Mobile menu elements
+const hamburgerMenu = document.querySelector('.hamburger-menu');
+const mobileMenu = document.querySelector('.mobile-menu');
+const mobileMenuBackdrop = document.querySelector('.mobile-menu-backdrop');
+const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
+const mobileMenuWhatsApp = document.querySelector('.mobile-menu-whatsapp');
+
 
 function init() {
     renderProducts();
     attachEventListeners();
     initFloatingTip();
+    initMobileMenu();
     // Preload fonts
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap';
@@ -299,7 +314,7 @@ function initFloatingTip() {
 function sendToWhatsApp() {
     if (!selectedProduct) return;
     
-    const phoneNumber = '56996467214'; // Number without +
+    const phoneNumber = WHATSAPP_PHONE; // Number without +
     let message;
     
     if (currentSection === 'permuta') {
@@ -320,6 +335,7 @@ function sendToWhatsApp() {
     // Close modal
     closeModal();
 }
+
 // ============================================
 // ANIMACIÓN CARA TRISTE (BOTÓN NO)
 // ============================================
@@ -343,6 +359,10 @@ function attachEventListeners() {
         button.addEventListener('click', () => {
             const section = button.getAttribute('data-section');
             changeSection(section);
+            // Close mobile menu when section is selected
+            if (mobileMenu) {
+                closeMobileMenu();
+            }
         });
     });
     
@@ -359,8 +379,11 @@ function attachEventListeners() {
     // YES button
     btnYes.addEventListener('click', sendToWhatsApp);
     
-    // NO button
-    btnNo.addEventListener('click', closeModal);
+    // NO button - now also shows sad face
+    btnNo.addEventListener('click', () => {
+        showSadFace();
+        closeModal();
+    });
     
     // Keyboard close (ESC)
     document.addEventListener('keydown', (e) => {
@@ -434,6 +457,85 @@ function changeSection(section) {
 }
 
 
+// ============================================
+// MOBILE MENU FUNCTIONALITY
+// ============================================
+
+function initMobileMenu() {
+    if (!hamburgerMenu || !mobileMenu) return;
+    
+    // Toggle menu on hamburger click
+    hamburgerMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
+    });
+    
+    // Close menu on backdrop click
+    if (mobileMenuBackdrop) {
+        mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
+    }
+    
+    // Handle mobile menu items
+    mobileMenuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const section = item.getAttribute('data-section');
+            if (section) {
+                changeSection(section);
+                closeMobileMenu();
+            }
+        });
+    });
+    
+    // Handle WhatsApp menu item
+    if (mobileMenuWhatsApp) {
+        mobileMenuWhatsApp.addEventListener('click', (e) => {
+            e.preventDefault();
+            openWhatsAppFromMenu();
+            closeMobileMenu();
+        });
+    }
+    
+    // Close menu on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+}
+
+function toggleMobileMenu() {
+    if (mobileMenu.classList.contains('active')) {
+        closeMobileMenu();
+    } else {
+        openMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    hamburgerMenu.classList.add('active');
+    mobileMenu.classList.add('active');
+    if (mobileMenuBackdrop) {
+        mobileMenuBackdrop.classList.add('active');
+    }
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+    hamburgerMenu.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    if (mobileMenuBackdrop) {
+        mobileMenuBackdrop.classList.remove('active');
+    }
+    document.body.style.overflow = '';
+}
+
+function openWhatsAppFromMenu() {
+    const phoneNumber = WHATSAPP_PHONE;
+    const message = encodeURIComponent('Hola, me interesa en los Little Pet Shop que tienes. 😊');
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappURL, '_blank');
+}
+
 // Detect if running on mobile
 function isMobile() {
     return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -443,6 +545,9 @@ function isMobile() {
 window.addEventListener('orientationchange', () => {
     if (modalOverlay.classList.contains('active')) {
         closeModal();
+    }
+    if (mobileMenu && mobileMenu.classList.contains('active')) {
+        closeMobileMenu();
     }
 });
 
