@@ -665,3 +665,231 @@ function attachPhotoDragListeners() {
 }
 
 attachPhotoDragListeners();
+
+
+// ============================================
+// CONSULTAR: PLANES, CARRITO Y COMPRA POR WHATSAPP
+// ============================================
+
+const SALES_WHATSAPP_PHONE = '56952005962'; // +56 9 5200 5962
+const CART_STORAGE_KEY = 'lps-consultar-cart';
+const PROMO_COUNT_KEY = 'lps-promo-views';
+const PROMO_MAX_VIEWS = 2;
+const PROMO_DELAY_MS = 5000;
+const PROMO_VISIBLE_MS = 6000;
+
+const CONSULTAR_PLANS = [
+    {
+        id: 'normal',
+        name: 'Página Normal',
+        price: 6500,
+        features: ['LPS', 'ACCESORIOS', 'OTROS', 'Espacios para más de 30 productos LPS']
+    },
+    {
+        id: 'normal-plus',
+        name: 'Página Normal +',
+        price: 7500,
+        features: ['LPS', 'ACCESORIOS', 'OTROS', 'Espacios para más de 50 productos LPS']
+    },
+    {
+        id: 'conocedora',
+        name: 'Página Conocedora',
+        price: 8000,
+        offer: true,
+        features: ['LPS', 'ACCESORIOS', 'OTROS', 'SE PERMUTA', 'Más de 70 espacios para LPS']
+    }
+];
+
+let consultarCart = [];
+let promoHideTimer = null;
+
+const $c = (id) => document.getElementById(id);
+
+function formatCLP(amount) {
+    return '$' + String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' CLP';
+}
+
+function loadConsultarCart() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(CART_STORAGE_KEY));
+        if (Array.isArray(saved)) {
+            return saved.filter(id => CONSULTAR_PLANS.some(p => p.id === id));
+        }
+    } catch (e) {}
+    return [];
+}
+
+function saveConsultarCart() {
+    try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(consultarCart));
+    } catch (e) {}
+}
+
+function getConsultarItems() {
+    return consultarCart.map(id => CONSULTAR_PLANS.find(p => p.id === id)).filter(Boolean);
+}
+
+function updateConsultarCount() {
+    const badge = $c('consultar-cart-count');
+    badge.textContent = consultarCart.length;
+    badge.classList.toggle('is-empty', consultarCart.length === 0);
+}
+
+function renderConsultarPlans() {
+    $c('consultar-plans').innerHTML = CONSULTAR_PLANS.map(p => {
+        const inCart = consultarCart.includes(p.id);
+        return `
+            <article class="plan-card${p.offer ? ' plan-card--offer' : ''}">
+                ${p.offer ? '<span class="plan-badge">OFERTA</span>' : ''}
+                <h4 class="plan-name">${p.name}</h4>
+                <p class="plan-price">${formatCLP(p.price)}</p>
+                <ul class="plan-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>
+                <button type="button" class="plan-add${inCart ? ' plan-add--added' : ''}" data-plan="${p.id}">
+                    ${inCart ? '✓ En el carrito' : 'Agregar al carrito'}
+                </button>
+            </article>`;
+    }).join('');
+}
+
+function renderConsultarCart() {
+    const items = getConsultarItems();
+    const total = items.reduce((sum, p) => sum + p.price, 0);
+    const box = $c('consultar-cart');
+
+    box.innerHTML = items.length
+        ? `<ul class="cart-list">${items.map(p => `
+                <li class="cart-item">
+                    <span class="cart-item-name">${p.name}</span>
+                    <span class="cart-item-price">${formatCLP(p.price)}</span>
+                    <button type="button" class="cart-item-remove" data-remove="${p.id}" aria-label="Quitar ${p.name}">&times;</button>
+                </li>`).join('')}</ul>
+            <p class="cart-total"><span>Total</span><strong>${formatCLP(total)}</strong></p>
+            <button type="button" class="cart-buy" id="cart-buy">COMPRAR</button>`
+        : '<p class="cart-empty">Tu carrito está vacío. Agrega una opción para continuar.</p>';
+
+    box.insertAdjacentHTML('beforeend', '<button type="button" class="cart-back" id="cart-back">← Ver opciones</button>');
+}
+
+function setConsultarView(view) {
+    const showCart = view === 'cart';
+    $c('consultar-plans').hidden = showCart;
+    $c('consultar-cart').hidden = !showCart;
+    $c('consultar-title').textContent = showCart ? 'TU CARRITO' : 'CONSULTAR';
+    if (showCart) {
+        renderConsultarCart();
+    } else {
+        renderConsultarPlans();
+    }
+}
+
+function openConsultar() {
+    closeMobileMenu();
+    hidePromoTip();
+    setConsultarView('plans');
+    $c('consultar-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    $c('consultar-close').focus();
+}
+
+function closeConsultar() {
+    $c('consultar-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function buyConsultarCart() {
+    const items = getConsultarItems();
+    if (!items.length) return;
+
+    const total = items.reduce((sum, p) => sum + p.price, 0);
+    const lines = items.map(p => `• ${p.name}${p.offer ? ' (OFERTA)' : ''} - ${formatCLP(p.price)}`);
+    const message = `Hola, me interesa comprar una página web:\n${lines.join('\n')}\nTotal: ${formatCLP(total)}`;
+
+    window.open(`https://wa.me/${SALES_WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+// ============================================
+// AVISO PROMOCIONAL (5s de espera, ~6s visible, máx. 2 veces por usuario)
+// ============================================
+
+function hidePromoTip() {
+    clearTimeout(promoHideTimer);
+    const tip = $c('promo-tip');
+    if (tip) tip.classList.remove('show');
+}
+
+function initPromoTip() {
+    const tip = $c('promo-tip');
+    if (!tip) return;
+
+    let views = 0;
+    try {
+        views = parseInt(localStorage.getItem(PROMO_COUNT_KEY), 10) || 0;
+    } catch (e) {}
+    if (views >= PROMO_MAX_VIEWS) return;
+
+    $c('promo-tip-close').addEventListener('click', hidePromoTip);
+    $c('promo-tip-link').addEventListener('click', openConsultar);
+
+    setTimeout(() => {
+        if ($c('consultar-overlay').classList.contains('active')) return;
+        try {
+            localStorage.setItem(PROMO_COUNT_KEY, String(views + 1));
+        } catch (e) {}
+        tip.classList.add('show');
+        promoHideTimer = setTimeout(hidePromoTip, PROMO_VISIBLE_MS);
+    }, PROMO_DELAY_MS);
+}
+
+function initConsultar() {
+    const overlay = $c('consultar-overlay');
+    if (!overlay) return;
+
+    consultarCart = loadConsultarCart();
+    updateConsultarCount();
+
+    $c('menu-consultar').addEventListener('click', openConsultar);
+    $c('consultar-cart-btn').addEventListener('click', () => setConsultarView('cart'));
+    $c('consultar-close').addEventListener('click', closeConsultar);
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeConsultar();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) closeConsultar();
+    });
+
+    $c('consultar-modal').addEventListener('click', (e) => {
+        const addBtn = e.target.closest('[data-plan]');
+        const removeBtn = e.target.closest('[data-remove]');
+
+        if (addBtn) {
+            const id = addBtn.dataset.plan;
+            consultarCart = consultarCart.includes(id)
+                ? consultarCart.filter(x => x !== id)
+                : [...consultarCart, id];
+            saveConsultarCart();
+            updateConsultarCount();
+            setConsultarView('plans');
+            const again = document.querySelector(`[data-plan="${id}"]`);
+            if (again) again.focus();
+        } else if (removeBtn) {
+            consultarCart = consultarCart.filter(x => x !== removeBtn.dataset.remove);
+            saveConsultarCart();
+            updateConsultarCount();
+            setConsultarView('cart');
+        } else if (e.target.closest('#cart-buy')) {
+            buyConsultarCart();
+        } else if (e.target.closest('#cart-back')) {
+            setConsultarView('plans');
+        }
+    });
+
+    initPromoTip();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initConsultar);
+} else {
+    initConsultar();
+}
