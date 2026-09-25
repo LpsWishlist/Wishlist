@@ -11,24 +11,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <h1 class="title">WISHLIST</h1>
         </div>
     </header>
-
-    <!-- Hamburger Menu Button (Mobile) -->
+    
     <button class="hamburger-menu" aria-label="Abrir menú" aria-expanded="false">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
     </button>
-
-    <!-- Mobile Menu Backdrop -->
+    
     <div class="mobile-menu-backdrop" id="mobile-menu-backdrop"></div>
-
-    <!-- Mobile Menu -->
     <nav class="mobile-menu" id="mobile-menu">
         <div class="mobile-menu-content">
             <button class="mobile-menu-item" data-section="lps">LPS</button>
@@ -43,8 +38,7 @@
             </button>
         </div>
     </nav>
-
-    <!-- Navigation -->
+    
     <nav class="nav">
         <button class="nav-button nav-button--active" data-section="lps">LPS</button>
         <button class="nav-button" data-section="accesorios">ACCESORIOS</button>
@@ -52,20 +46,14 @@
         <button class="nav-button" data-section="permuta">SE PERMUTA</button>
         <button class="nav-button" data-section="fotos">FOTOS</button>
     </nav>
-
-    <!-- Main Content -->
+    
     <main class="main">
         <div class="section-header">
             <h2 class="section-title section-title--shine" id="section-title">LPS</h2>
         </div>
-
-        <!-- Products Grid -->
         <div class="grid" id="products-grid">
-            <!-- Los productos se cargan con JavaScript -->
         </div>
     </main>
-
-    <!-- Modal -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal" id="modal">
             <button class="modal-close" id="modal-close" aria-label="Cerrar">
@@ -91,12 +79,10 @@
         </div>
     </div>
 
-    <!-- Overlay de animación "cara triste" al presionar NO (LPS, ACCESORIOS, OTROS, SE PERMUTA) -->
     <div class="sad-face-overlay" id="sad-face-overlay" aria-hidden="true">
         <img src="image/triste-1.png" alt="" class="sad-face-image" id="sad-face-image" onerror="this.style.display='none'">
     </div>
 
-    <!-- Modal de Fotos: se abre al hacer clic en cualquier foto de la sección FOTOS -->
     <div class="photo-modal-overlay" id="photo-modal-overlay">
         <div class="photo-modal" id="photo-modal" tabindex="-1">
             <button class="modal-close" id="photo-modal-close" aria-label="Cerrar">
@@ -134,7 +120,6 @@
         </div>
     </div>
 
-    <!-- Aviso flotante: aparece a los 8s indicando que las imágenes son clickeables -->
     <div class="floating-tip" id="floating-tip">
         <p class="floating-tip-text">Puedes hacer clic en las imágenes sin problema.</p>
         <button class="floating-tip-close" id="floating-tip-close" aria-label="Cerrar aviso">
