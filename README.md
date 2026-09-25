@@ -44,4 +44,7 @@
 ![Texto descriptivo](images/fot-02.jpg)
 ![Texto descriptivo](images/fot-03.jpg)
 ![Texto descriptivo](images/triste-1.png)
+![Texto descriptivo](images/hallo-01.jpg)
+![Texto descriptivo](images/navi-01.jpg)
+![Texto descriptivo](images/norm-01.jpg)
 
