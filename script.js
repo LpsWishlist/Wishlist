@@ -1,3 +1,9 @@
+// ============================================
+// EVENTOS TEMPORALES: cambia a true para activar
+// ============================================
+const HALLOWEEN = false;
+const NAVIDAD = false;
+
 const products = {
     lps: [
         { id: 1, name: 'Fox (673)', image: 'images/lps-01.jpg', description: 'Color marrón claro con detalles blancos y marrones que realzan su cara, cuerpo y cola, y sus orejas tienen un detalle puntiagudo de color rosa.' },
@@ -668,228 +674,85 @@ attachPhotoDragListeners();
 
 
 // ============================================
-// CONSULTAR: PLANES, CARRITO Y COMPRA POR WHATSAPP
+// EVENTOS TEMPORALES (HALLOWEEN / NAVIDAD)
+// Se controlan con las constantes HALLOWEEN y NAVIDAD del inicio del archivo
 // ============================================
 
-const SALES_WHATSAPP_PHONE = '56952005962'; // +56 9 5200 5962
-const CART_STORAGE_KEY = 'lps-consultar-cart';
-const PROMO_COUNT_KEY = 'lps-promo-views';
-const PROMO_MAX_VIEWS = 2;
-const PROMO_DELAY_MS = 5000;
-const PROMO_VISIBLE_MS = 6000;
+const EVT_ART = {
+    bat: '<svg viewBox="0 0 48 24"><path d="M24 7c1.4 0 2.2 1.2 2.4 2.8L28 8.6c2-2.6 6.4-4.2 11.6-3.4-2.2 1.6-3.4 3.6-3.6 6-2-1.2-4-.8-5.2 1-1-1.4-3-1.6-4.4-.2L24 18l-2.4-6c-1.4-1.4-3.4-1.2-4.4.2-1.2-1.8-3.2-2.2-5.2-1-.2-2.4-1.4-4.4-3.6-6C13.6 4.4 18 6 20 8.6l1.6 1.2C21.8 8.2 22.6 7 24 7z"/></svg>',
+    pumpkin: '<svg viewBox="0 0 40 36"><path class="st" d="M18 9c0-3 1-5 3-7l1.5 1.5c-1 1.5-1.5 3-1.5 5.5z"/><ellipse cx="12" cy="22" rx="9" ry="12"/><ellipse cx="28" cy="22" rx="9" ry="12"/><ellipse cx="20" cy="22" rx="8" ry="13"/><path class="fc" d="M13 20l3-4 3 4zM21 20l3-4 3 4zM14 27q6 5 12 0q-6 1-12 0z"/></svg>',
+    web: '<svg viewBox="0 0 56 56"><path d="M0 0H56M0 0L51.7 21.4M0 0L39.6 39.6M0 0L21.4 51.7M0 0V56M16 0L14.8 6.1 11.3 11.3 6.1 14.8 0 16M32 0L29.6 12.2 22.6 22.6 12.2 29.6 0 32M48 0L44.3 18.4 33.9 33.9 18.4 44.3 0 48"/></svg>',
+    spider: '<svg viewBox="0 0 20 60"><path d="M10 0v40"/><circle cx="10" cy="46" r="5"/><circle cx="10" cy="40.5" r="3"/><path d="M6 44l-5-4M6 46l-6 1M7 49l-5 6M14 44l5-4M14 46l6 1M13 49l5 6"/></svg>',
+    flake: '<svg viewBox="0 0 24 24"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M12 5l-2-2M12 5l2-2M12 19l-2 2M12 19l2 2"/></svg>',
+    star: '<svg viewBox="0 0 24 24"><path d="M12 1c1 6 3 9 11 11-8 2-10 5-11 11-1-6-3-9-11-11 8-2 10-5 11-11z"/></svg>',
+    tree: '<svg viewBox="0 0 30 40"><path class="tr" d="M15 3l7 11h-4l7 10h-5l6 10H4l6-10H5l7-10H8z"/><rect class="tk" x="13" y="34" width="4" height="5" rx="1"/><circle class="bl" cx="12" cy="22" r="1.6"/><circle class="bl" cx="19" cy="29" r="1.6"/><circle class="bl" cx="14" cy="13" r="1.3"/></svg>',
+    gift: '<svg viewBox="0 0 30 30"><rect class="gb" x="4" y="13" width="22" height="15" rx="2"/><rect class="gb" x="3" y="9" width="24" height="6" rx="2"/><rect class="gr" x="13.5" y="9" width="3" height="19"/><path class="gr" d="M15 9c-3-6-9-5-7-1 1 2 5 1 7 1zM15 9c3-6 9-5 7-1-1 2-5 1-7 1z"/></svg>'
+};
 
-const CONSULTAR_PLANS = [
-    {
-        id: 'normal',
-        name: 'Página Normal',
-        price: 6500,
-        features: ['LPS', 'ACCESORIOS', 'OTROS', 'Espacios para más de 30 productos LPS']
-    },
-    {
-        id: 'normal-plus',
-        name: 'Página Normal +',
-        price: 7500,
-        features: ['LPS', 'ACCESORIOS', 'OTROS', 'Espacios para más de 50 productos LPS']
-    },
-    {
-        id: 'conocedora',
-        name: 'Página Conocedora',
-        price: 8000,
-        offer: true,
-        features: ['LPS', 'ACCESORIOS', 'OTROS', 'SE PERMUTA', 'Más de 70 espacios para LPS']
+function evtDecor(parent, items) {
+    parent.insertAdjacentHTML('beforeend', items.map(([art, cls]) =>
+        `<span class="evt-item ${cls}" aria-hidden="true">${EVT_ART[art]}</span>`
+    ).join(''));
+}
+
+function evtLights() {
+    let wire = 'M0 2';
+    let bulbs = '';
+    for (let i = 0; i < 10; i++) {
+        const x = i * 100;
+        wire += `Q${x + 50} 22 ${x + 100} 2`;
+        bulbs += `<ellipse class="b${(i % 2) * 2 + 1}" cx="${x + 30}" cy="15" rx="3.4" ry="5"/>`
+               + `<ellipse class="b${(i % 2) * 2 + 2}" cx="${x + 70}" cy="15" rx="3.4" ry="5"/>`;
     }
-];
-
-let consultarCart = [];
-let promoHideTimer = null;
-
-const $c = (id) => document.getElementById(id);
-
-function formatCLP(amount) {
-    return '$' + String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' CLP';
+    return `<div class="evt-lights" aria-hidden="true"><svg viewBox="0 0 1000 24" preserveAspectRatio="xMidYMin slice"><path d="${wire}"/>${bulbs}</svg></div>`;
 }
 
-function loadConsultarCart() {
-    try {
-        const saved = JSON.parse(localStorage.getItem(CART_STORAGE_KEY));
-        if (Array.isArray(saved)) {
-            return saved.filter(id => CONSULTAR_PLANS.some(p => p.id === id));
-        }
-    } catch (e) {}
-    return [];
-}
-
-function saveConsultarCart() {
-    try {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(consultarCart));
-    } catch (e) {}
-}
-
-function getConsultarItems() {
-    return consultarCart.map(id => CONSULTAR_PLANS.find(p => p.id === id)).filter(Boolean);
-}
-
-function updateConsultarCount() {
-    const badge = $c('consultar-cart-count');
-    badge.textContent = consultarCart.length;
-    badge.classList.toggle('is-empty', consultarCart.length === 0);
-}
-
-function renderConsultarPlans() {
-    $c('consultar-plans').innerHTML = CONSULTAR_PLANS.map(p => {
-        const inCart = consultarCart.includes(p.id);
-        return `
-            <article class="plan-card${p.offer ? ' plan-card--offer' : ''}">
-                ${p.offer ? '<span class="plan-badge">OFERTA</span>' : ''}
-                <h4 class="plan-name">${p.name}</h4>
-                <p class="plan-price">${formatCLP(p.price)}</p>
-                <ul class="plan-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>
-                <button type="button" class="plan-add${inCart ? ' plan-add--added' : ''}" data-plan="${p.id}">
-                    ${inCart ? '✓ En el carrito' : 'Agregar al carrito'}
-                </button>
-            </article>`;
-    }).join('');
-}
-
-function renderConsultarCart() {
-    const items = getConsultarItems();
-    const total = items.reduce((sum, p) => sum + p.price, 0);
-    const box = $c('consultar-cart');
-
-    box.innerHTML = items.length
-        ? `<ul class="cart-list">${items.map(p => `
-                <li class="cart-item">
-                    <span class="cart-item-name">${p.name}</span>
-                    <span class="cart-item-price">${formatCLP(p.price)}</span>
-                    <button type="button" class="cart-item-remove" data-remove="${p.id}" aria-label="Quitar ${p.name}">&times;</button>
-                </li>`).join('')}</ul>
-            <p class="cart-total"><span>Total</span><strong>${formatCLP(total)}</strong></p>
-            <button type="button" class="cart-buy" id="cart-buy">COMPRAR</button>`
-        : '<p class="cart-empty">Tu carrito está vacío. Agrega una opción para continuar.</p>';
-
-    box.insertAdjacentHTML('beforeend', '<button type="button" class="cart-back" id="cart-back">← Ver opciones</button>');
-}
-
-function setConsultarView(view) {
-    const showCart = view === 'cart';
-    $c('consultar-plans').hidden = showCart;
-    $c('consultar-cart').hidden = !showCart;
-    $c('consultar-title').textContent = showCart ? 'TU CARRITO' : 'CONSULTAR';
-    if (showCart) {
-        renderConsultarCart();
-    } else {
-        renderConsultarPlans();
+function evtSnow() {
+    const box = document.createElement('div');
+    box.className = 'evt-snow';
+    box.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 22; i++) {
+        const flake = document.createElement('i');
+        const size = 3 + Math.random() * 3;
+        flake.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;opacity:${0.5 + Math.random() * 0.4};animation-duration:${14 + Math.random() * 12}s;animation-delay:${-Math.random() * 26}s;--dx:${(Math.random() - 0.5) * 60}px`;
+        box.appendChild(flake);
     }
+    document.body.appendChild(box);
 }
 
-function openConsultar() {
-    closeMobileMenu();
-    hidePromoTip();
-    setConsultarView('plans');
-    $c('consultar-overlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    $c('consultar-close').focus();
-}
+function initEventos() {
+    const header = document.querySelector('.header');
+    const footer = document.querySelector('.footer');
+    if (!header || !footer || !(HALLOWEEN || NAVIDAD)) return;
 
-function closeConsultar() {
-    $c('consultar-overlay').classList.remove('active');
-    document.body.style.overflow = '';
-}
+    footer.classList.add('evt-foot');
 
-function buyConsultarCart() {
-    const items = getConsultarItems();
-    if (!items.length) return;
+    if (HALLOWEEN) {
+        document.body.classList.add('evt-halloween');
+        evtDecor(header, [
+            ['bat', 'evt-bat evt-bat--1'], ['bat', 'evt-bat evt-bat--2'],
+            ['bat', 'evt-bat evt-bat--3'], ['bat', 'evt-bat evt-bat--4'],
+            ['pumpkin', 'evt-pumpkin evt-cl'], ['pumpkin', 'evt-pumpkin evt-cr'],
+            ['web', 'evt-web'], ['spider', 'evt-spider']
+        ]);
+        evtDecor(footer, [['pumpkin', 'evt-pumpkin'], ['pumpkin', 'evt-pumpkin'], ['pumpkin', 'evt-pumpkin']]);
+    }
 
-    const total = items.reduce((sum, p) => sum + p.price, 0);
-    const lines = items.map(p => `• ${p.name}${p.offer ? ' (OFERTA)' : ''} - ${formatCLP(p.price)}`);
-    const message = `Hola, me interesa comprar una página web:\n${lines.join('\n')}\nTotal: ${formatCLP(total)}`;
-
-    window.open(`https://wa.me/${SALES_WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`, '_blank');
-}
-
-// ============================================
-// AVISO PROMOCIONAL (5s de espera, ~6s visible, máx. 2 veces por usuario)
-// ============================================
-
-function hidePromoTip() {
-    clearTimeout(promoHideTimer);
-    const tip = $c('promo-tip');
-    if (tip) tip.classList.remove('show');
-}
-
-function initPromoTip() {
-    const tip = $c('promo-tip');
-    if (!tip) return;
-
-    let views = 0;
-    try {
-        views = parseInt(localStorage.getItem(PROMO_COUNT_KEY), 10) || 0;
-    } catch (e) {}
-    if (views >= PROMO_MAX_VIEWS) return;
-
-    $c('promo-tip-close').addEventListener('click', hidePromoTip);
-    $c('promo-tip-link').addEventListener('click', openConsultar);
-
-    setTimeout(() => {
-        if ($c('consultar-overlay').classList.contains('active')) return;
-        try {
-            localStorage.setItem(PROMO_COUNT_KEY, String(views + 1));
-        } catch (e) {}
-        tip.classList.add('show');
-        promoHideTimer = setTimeout(hidePromoTip, PROMO_VISIBLE_MS);
-    }, PROMO_DELAY_MS);
-}
-
-function initConsultar() {
-    const overlay = $c('consultar-overlay');
-    if (!overlay) return;
-
-    consultarCart = loadConsultarCart();
-    updateConsultarCount();
-
-    $c('menu-consultar').addEventListener('click', openConsultar);
-    $c('consultar-cart-btn').addEventListener('click', () => setConsultarView('cart'));
-    $c('consultar-close').addEventListener('click', closeConsultar);
-
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeConsultar();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && overlay.classList.contains('active')) closeConsultar();
-    });
-
-    $c('consultar-modal').addEventListener('click', (e) => {
-        const addBtn = e.target.closest('[data-plan]');
-        const removeBtn = e.target.closest('[data-remove]');
-
-        if (addBtn) {
-            const id = addBtn.dataset.plan;
-            consultarCart = consultarCart.includes(id)
-                ? consultarCart.filter(x => x !== id)
-                : [...consultarCart, id];
-            saveConsultarCart();
-            updateConsultarCount();
-            setConsultarView('plans');
-            const again = document.querySelector(`[data-plan="${id}"]`);
-            if (again) again.focus();
-        } else if (removeBtn) {
-            consultarCart = consultarCart.filter(x => x !== removeBtn.dataset.remove);
-            saveConsultarCart();
-            updateConsultarCount();
-            setConsultarView('cart');
-        } else if (e.target.closest('#cart-buy')) {
-            buyConsultarCart();
-        } else if (e.target.closest('#cart-back')) {
-            setConsultarView('plans');
-        }
-    });
-
-    initPromoTip();
+    if (NAVIDAD) {
+        document.body.classList.add('evt-navidad');
+        header.insertAdjacentHTML('beforeend', evtLights());
+        evtDecor(header, [
+            ['flake', 'evt-flake evt-fl-1'], ['flake', 'evt-flake evt-fl-2'], ['star', 'evt-star'],
+            ['tree', 'evt-tree evt-cl'], ['tree', 'evt-tree evt-cr']
+        ]);
+        evtDecor(footer, [['tree', 'evt-tree'], ['gift', 'evt-gift'], ['tree', 'evt-tree']]);
+        evtSnow();
+    }
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initConsultar);
+    document.addEventListener('DOMContentLoaded', initEventos);
 } else {
-    initConsultar();
+    initEventos();
 }
+
