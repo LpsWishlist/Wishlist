@@ -3,292 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NevCat</title>
+    <meta name="description" content="Catálogo de Little Pet Shop - Colecciona tus mascotas favoritas">
+    <meta name="keywords" content="Little Pet Shop, LPS, colecciones, tienda online">
+    <meta name="theme-color" content="#F5D5E3">
+    <title>Little Pet Shop</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
-        <div class="header-inner">
-            <div class="logo-section">
-                <h1 class="logo">NevCat</h1>
-                <p class="tagline">Wishlist y mucho más.</p>
-            </div>
-            <button class="cart-btn" id="cartBtn" aria-label="Abrir carrito">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-                <span class="cart-badge" id="cartCount">0</span>
-            </button>
+        <div class="header-content">
+            <h1 class="title">WISHLIST</h1>
         </div>
     </header>
 
-    <section class="welcome-section">
-        <img src="images/port-01.jpg" alt="Bienvenida" class="welcome-image">
-    </section>
+    <!-- Hamburger Menu Button (Mobile) -->
+    <button class="hamburger-menu" aria-label="Abrir menú" aria-expanded="false">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </button>
 
-    <section class="products-section">
-        <h2 class="main-title">Nuestras Páginas Web</h2>
-        <p class="subtitle">Elige la opción que más se adapte a ti.</p>
-        <div class="scroll-hint-banner">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-            <span>Desliza para ver más opciones</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    <!-- Mobile Menu Backdrop -->
+    <div class="mobile-menu-backdrop" id="mobile-menu-backdrop"></div>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-content">
+            <button class="mobile-menu-item" data-section="lps">LPS</button>
+            <button class="mobile-menu-item" data-section="accesorios">ACCESORIOS</button>
+            <button class="mobile-menu-item" data-section="otros">OTROS</button>
+            <button class="mobile-menu-item" data-section="permuta">SE PERMUTA</button>
+            <button class="mobile-menu-item" data-section="fotos">FOTOS</button>
+            <div class="mobile-menu-separator"></div>
+            <button class="mobile-menu-whatsapp" aria-label="Contactar por WhatsApp">
+                <span>WhatsApp</span>
+                <span class="whatsapp-icon">💬</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <button class="nav-button nav-button--active" data-section="lps">LPS</button>
+        <button class="nav-button" data-section="accesorios">ACCESORIOS</button>
+        <button class="nav-button" data-section="otros">OTROS</button>
+        <button class="nav-button" data-section="permuta">SE PERMUTA</button>
+        <button class="nav-button" data-section="fotos">FOTOS</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="section-header">
+            <h2 class="section-title section-title--shine" id="section-title">LPS</h2>
         </div>
 
-        <div class="scroll-container">
-                <button class="scroll-arrow scroll-prev" id="scrollPrev" aria-label="Anterior" disabled>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-                </button>
-                <button class="scroll-arrow scroll-next" id="scrollNext" aria-label="Siguiente">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-                </button>
-            <div class="products-grid" id="productsScroll">
-                    <div class="product-item" data-product="estandar">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Wishlist Estándar</h3>
-                            </div>
-                            <ul class="features">
-                                <li>LPS</li>
-                                <li>ACCESORIOS</li>
-                                <li>OTROS</li>
-                                <li class="highlight">30 espacios LPS</li>
-                            </ul>
-                            <div class="card-footer">
-                                <span class="price">$5.000</span>
-                                <button class="buy-btn" data-id="estandar" data-name="Página Wishlist Estándar" data-price="6000">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-product="vista">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Wishlist Vista</h3>
-                            </div>
-                            <ul class="features">
-                                <li>LPS</li>
-                                <li>ACCESORIOS</li>
-                                <li>OTROS</li>
-                                <li>SE PERMUTA</li>
-                                <li class="highlight">50 espacios LPS</li>
-                            </ul>
-                            <button type="button" class="update-badge" data-info="vista">
-                                <span class="badge-icon">ℹ</span>
-                                <span class="badge-text">Actualización de Página por 2 semanas</span>
-                            </button>
-                            <div class="update-description" id="desc-vista" style="display: none;">
-                                <p>Este agregado incluye que cuando ya hayas conseguido uno de tus LPS o hayas permutado o quieras agregar alguna foto extra, podrás pedir por Wsp que tu página sea actualizada. Esto tendrá una duración de 2 semanas.</p>
-                            </div>
-                            <div class="card-footer">
-                                <span class="price">$6.500</span>
-                                <button class="buy-btn" data-id="vista" data-name="Página Wishlist Vista" data-price="7000">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item" data-product="conocedora">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Wishlist Conocedora</h3>
-                            </div>
-                            <ul class="features">
-                                <li>LPS</li>
-                                <li>ACCESORIOS</li>
-                                <li>OTROS</li>
-                                <li>SE PERMUTA</li>
-                                <li>FOTOS</li>
-                                <li class="highlight">65 espacios LPS</li>
-                                <li class="highlight">5 espacios de fotos</li>
-                            </ul>
-                            <button type="button" class="update-badge" data-info="conocedora">
-                                <span class="badge-icon">ℹ</span>
-                                <span class="badge-text">Actualización de Página por 2 semanas</span>
-                            </button>
-                            <div class="update-description" id="desc-conocedora" style="display: none;">
-                                <p>Este agregado incluye que cuando ya hayas conseguido uno de tus LPS o hayas permutado o quieras agregar alguna foto extra, podrás pedir por Wsp que tu página sea actualizada. Esto tendrá una duración de 2 semanas.</p>
-                            </div>
-                            <div class="card-footer">
-                                <span class="price">$8.000</span>
-                                <button class="buy-btn" data-id="conocedora" data-name="Página Wishlist Conocedora" data-price="8000">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item special-nev" data-product="nev">
-                        <span class="badge">OFERTA</span>
-                        <div class="card card-special">
-                            <div class="card-header">
-                                <h3>Wishlist Nev</h3>
-                            </div>
-                            <ul class="features">
-                                <li>LPS</li>
-                                <li>ACCESORIOS</li>
-                                <li>OTROS</li>
-                                <li>SE PERMUTA</li>
-                                <li>FOTOS</li>
-                                <li class="highlight">45 espacios LPS</li>
-                                <li class="highlight">3 espacios de fotos</li>
-                            </ul>
-                            <button type="button" class="update-badge" data-info="nev">
-                                <span class="badge-icon">ℹ</span>
-                                <span class="badge-text">Actualización de Página por 2 semanas</span>
-                            </button>
-                            <div class="update-description" id="desc-nev" style="display: none;">
-                                <p>Este agregado incluye que cuando ya hayas conseguido uno de tus LPS o hayas permutado o quieras agregar alguna foto extra, podrás pedir por Wsp que tu página sea actualizada. Esto tendrá una duración de 2 semanas.</p>
-                            </div>
-                            <div class="card-footer">
-                                <span class="price">$7.500</span>
-                                <button class="buy-btn" data-id="nev" data-name="Página Wishlist Nev" data-price="7500">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-item special-cat" data-product="cat">
-                        <span class="badge cat-badge">EXCLUSIVA</span>
-                        <div class="card card-cat">
-                            <div class="card-header">
-                                <h3>Wishlist Cat</h3>
-                            </div>
-                            <ul class="features">
-                                <li>LPS</li>
-                                <li>ACCESORIOS</li>
-                                <li>OTROS</li>
-                                <li class="highlight">35 espacios LPS</li>
-                            </ul>
-                            <div class="lps-options">
-                                <p class="lps-label">Precio: 1 de estos 2 LPS</p>
-                                <div class="lps-images">
-                                    <img src="images/pre-01.jpg" alt="LPS 1">
-                                    <span>o</span>
-                                    <img src="images/pre-02.jpg" alt="LPS 2">
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <button class="buy-btn" data-id="cat" data-name="Página Wishlist Cat" data-price="LPS">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-    </section>
-
-    <section class="themes-section">
-        <h2 class="themes-title">Tu Página se Adapta a las Celebraciones</h2>
-        <p class="themes-subtitle">Disfruta de diferentes temas según la época del año</p>
-        <div class="themes-grid">
-            <div class="theme-card">
-                <img src="images/imagen-01.jpg" alt="Tema Normal" class="theme-image">
-                <h3>Normal</h3>
-            </div>
-            <div class="theme-card">
-                <img src="images/imagen-02.jpg" alt="Tema Halloween" class="theme-image">
-                <h3>Halloween</h3>
-            </div>
-            <div class="theme-card">
-                <img src="images/imagen-03.jpg" alt="Tema Navidad" class="theme-image">
-                <h3>Navidad</h3>
-            </div>
+        <!-- Products Grid -->
+        <div class="grid" id="products-grid">
+            <!-- Los productos se cargan con JavaScript -->
         </div>
-    </section>
+    </main>
 
-    <section class="info-section">
-        <h2 class="info-title">¿Qué significa cada opción?</h2>
-        <div class="info-grid">
-            <div class="info-card">
-                <h3>LPS</h3>
-                <p>Aquí la gente podrá ver los LPS que deseas a toda costa.</p>
-            </div>
-            <div class="info-card">
-                <h3>ACCESORIOS</h3>
-                <p>La gente podrá ver los accesorios que tanto necesitan tus LPS.</p>
-            </div>
-            <div class="info-card">
-                <h3>OTROS</h3>
-                <p>La gente podrá ver cosas variadas que necesitas, como gorros u objetos.</p>
-            </div>
-            <div class="info-card">
-                <h3>SE PERMUTA</h3>
-                <p>Aquí podrás mostrarle a la gente qué LPS estás permutando.</p>
-            </div>
-            <div class="info-card">
-                <h3>FOTOS</h3>
-                <p>Nada mejor que mostrarle fotos hermosas que tienes de tus LPS.</p>
-            </div>
-        </div>
-    </section>
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal">
+            <button class="modal-close" id="modal-close" aria-label="Cerrar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
 
-    <section class="faq-section">
-        <h2 class="faq-title">Preguntas que te podrías llegar a hacer</h2>
-        <div class="faq-container">
-            <div class="faq-item">
-                <button class="faq-question" type="button">
-                    <span>¿La página se caerá o se cerrará algún día y ya no funcionará?</span>
-                    <span class="faq-toggle">+</span>
-                </button>
-                <div class="faq-answer" style="display: none;">
-                    <p>No, por ningún motivo tu página Wishlist será borrada ni dejará de funcionar. Para mantener tu página funcionando utilizamos GitHub, el cual permite que el servicio sea un precio MUCHO más accesible, evitando costos elevados de alojamiento. GitHub se encarga de mantener tu página disponible y funcionando de forma estable.</p>
+            <div class="modal-content">
+               <img id="modal-image" alt="Imagen del producto">
+                <h3 class="modal-product-name" id="modal-product-name">Nombre del Producto</h3>
+
+                <div class="question-container">
+                    <p class="question" id="modal-question">¿Lo tienes?</p>
+                </div>
+
+                <div class="button-container">
+                    <button class="button button--yes" id="btn-yes">SÍ</button>
+                    <button class="button button--no" id="btn-no">NO</button>
                 </div>
             </div>
-
-            <div class="faq-item">
-                <button class="faq-question" type="button">
-                    <span>¿Si tengo errores con la página hay reembolso?</span>
-                    <span class="faq-toggle">+</span>
-                </button>
-                <div class="faq-answer" style="display: none;">
-                    <p>No. Si la página contiene algún error o problema de funcionamiento, contará con la mantención correspondiente para solucionarlo y garantizar que siga funcionando correctamente.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question" type="button">
-                    <span>¿Si quiero hacer algún cambio de estilo de la página puedo hacerlo?</span>
-                    <span class="faq-toggle">+</span>
-                </button>
-                <div class="faq-answer" style="display: none;">
-                    <p>Claro. Si tu compra incluye la opción de “Actualización de Página por 2 semanas”, podrás solicitar cambios de colores, siempre respetando el diseño original y manteniendo su estructura.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="final-section">
-        <img src="images/out-01.jpg" alt="Gracias" class="final-image">
-    </section>
-
-    <div class="preview-overlay" id="previewOverlay">
-        <div class="preview-modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
-            <div class="preview-header">
-                <h2 id="previewTitle">Vista previa</h2>
-                <button class="close-btn" id="closePreview" aria-label="Cerrar vista previa">✕</button>
-            </div>
-            <iframe class="preview-frame" id="previewFrame" title="Vista previa de la página"></iframe>
         </div>
     </div>
 
-    <div class="cart-overlay" id="cartOverlay"></div>
-    <div class="cart-panel" id="cartPanel">
-        <div class="cart-header">
-            <h2>Tu Carrito</h2>
-            <button class="close-btn" id="closeCart">✕</button>
-        </div>
-        <div class="cart-content" id="cartContent">
-            <p class="empty-msg">Tu carrito está vacío</p>
-        </div>
-        <div class="cart-checkout" id="cartCheckout" style="display: none;">
-            <div class="total">
-                <span>Total:</span>
-                <span id="totalPrice">$0</span>
+    <!-- Overlay de animación "cara triste" al presionar NO (LPS, ACCESORIOS, OTROS, SE PERMUTA) -->
+    <div class="sad-face-overlay" id="sad-face-overlay" aria-hidden="true">
+        <img src="image/triste-1.png" alt="" class="sad-face-image" id="sad-face-image" onerror="this.style.display='none'">
+    </div>
+
+    <!-- Modal de Fotos: se abre al hacer clic en cualquier foto de la sección FOTOS -->
+    <div class="photo-modal-overlay" id="photo-modal-overlay">
+        <div class="photo-modal" id="photo-modal" tabindex="-1">
+            <button class="modal-close" id="photo-modal-close" aria-label="Cerrar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="photo-modal-content">
+                <div class="photo-zoom-container">
+                    <img class="photo-zoom-image" id="photo-zoom-image" src="" alt="">
+                </div>
+
+                <div class="photo-controls">
+                    <button class="photo-zoom-btn" id="photo-zoom-out" aria-label="Alejar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <button class="photo-zoom-btn" id="photo-zoom-reset" aria-label="Restablecer zoom">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+                            <polyline points="3 4 3 9 8 9"></polyline>
+                        </svg>
+                    </button>
+                    <button class="photo-zoom-btn" id="photo-zoom-in" aria-label="Acercar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="payment-info">
-                <p class="payment-title">Métodos de Pago:</p>
-                <p class="payment-method">Banco Estado (Cuenta RUT)</p>
-                <p class="payment-method">Wise</p>
-            </div>
-            <button class="checkout-btn" id="checkoutBtn">Comprar por WhatsApp</button>
         </div>
     </div>
+
+    <!-- Aviso flotante: aparece a los 8s indicando que las imágenes son clickeables -->
+    <div class="floating-tip" id="floating-tip">
+        <p class="floating-tip-text">Puedes hacer clic en las imágenes sin problema.</p>
+        <button class="floating-tip-close" id="floating-tip-close" aria-label="Cerrar aviso">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <footer class="footer"></footer>
 
     <script src="script.js"></script>
 </body>
 </html>
+
