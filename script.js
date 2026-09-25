@@ -68,7 +68,6 @@ let photoDragStart = { x: 0, y: 0 };
 let photoOffset = { x: 0, y: 0 };
 let sadFaceTimer = null;
 
-// WhatsApp configuration
 const WHATSAPP_PHONE = '56996467214';
 
 const navButtons = document.querySelectorAll('.nav-button');
@@ -83,11 +82,9 @@ const modalQuestion = document.getElementById('modal-question');
 const btnYes = document.getElementById('btn-yes');
 const btnNo = document.getElementById('btn-no');
 
-// Sad face overlay elements
 const sadFaceOverlay = document.getElementById('sad-face-overlay');
 const sadFaceImage = document.getElementById('sad-face-image');
 
-// Photo modal elements
 const photoModalOverlay = document.getElementById('photo-modal-overlay');
 const photoModal = document.getElementById('photo-modal');
 const photoModalClose = document.getElementById('photo-modal-close');
@@ -97,11 +94,9 @@ const photoZoomOutBtn = document.getElementById('photo-zoom-out');
 const photoZoomResetBtn = document.getElementById('photo-zoom-reset');
 const photoZoomContainer = document.querySelector('.photo-zoom-container');
 
-// Floating tip elements
 const floatingTip = document.getElementById('floating-tip');
 const floatingTipClose = document.getElementById('floating-tip-close');
 
-// Mobile menu elements
 const hamburgerMenu = document.querySelector('.hamburger-menu');
 const mobileMenu = document.querySelector('.mobile-menu');
 const mobileMenuBackdrop = document.querySelector('.mobile-menu-backdrop');
@@ -114,7 +109,7 @@ function init() {
     attachEventListeners();
     initFloatingTip();
     initMobileMenu();
-    // Preload fonts
+    
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap';
     link.rel = 'stylesheet';
@@ -136,7 +131,6 @@ function renderProducts() {
         const card = createProductCard(product);
         productsGrid.appendChild(card);
         
-        // Stagger animation
         card.style.animation = `fadeIn 0.5s ease-out ${index * 0.05}s both`;
     });
 }
@@ -150,8 +144,7 @@ function renderPhotos() {
     currentPhotos.forEach((photo, index) => {
         const photoCard = createPhotoCard(photo);
         productsGrid.appendChild(photoCard);
-        
-        // Stagger animation
+
         photoCard.style.animation = `fadeIn 0.5s ease-out ${index * 0.05}s both`;
     });
 }
@@ -216,27 +209,19 @@ function createPhotoCard(photo) {
 function openModal(product) {
     selectedProduct = product;
     
-    // Update modal content
     modalImage.src = product.image; // Esto cambia la ruta de la foto
     modalImage.alt = product.name;  // Esto añade el texto accesible
     modalProductName.textContent = product.name;
     
-    // ... el resto de tu código de la función openModal sigue igual abajo
-
-    
-    // Update question based on section
     const questionText = currentSection === 'permuta' 
         ? '¿Deseas Permutar?' 
         : '¿Lo tienes?';
     modalQuestion.textContent = questionText;
     
-    // Show modal with animation
     modalOverlay.classList.add('active');
     
-    // Focus on modal for accessibility
     modal.focus();
     
-    // Prevent body scroll
     document.body.style.overflow = 'hidden';
 }
 
@@ -244,7 +229,6 @@ function closeModal() {
     modalOverlay.classList.remove('active');
     selectedProduct = null;
     
-    // Restore body scroll
     document.body.style.overflow = '';
 }
 
@@ -253,23 +237,19 @@ function openPhotoModal(photo) {
     photoZoomImage.src = photo.imageUrl;
     photoZoomImage.alt = photo.name;
     
-    // Reset zoom
     photoZoomLevel = 1;
     photoOffset = { x: 0, y: 0 };
     updatePhotoZoom();
-    
-    // Show modal
+
     photoModalOverlay.classList.add('active');
     photoModal.focus();
     
-    // Prevent body scroll
     document.body.style.overflow = 'hidden';
 }
 
 function closePhotoModal() {
     photoModalOverlay.classList.remove('active');
     
-    // Restore body scroll
     document.body.style.overflow = '';
 }
 
@@ -317,7 +297,7 @@ function initFloatingTip() {
 function sendToWhatsApp() {
     if (!selectedProduct) return;
     
-    const phoneNumber = WHATSAPP_PHONE; // Number without +
+    const phoneNumber = WHATSAPP_PHONE;
     let message;
     
     if (currentSection === 'permuta') {
@@ -326,91 +306,74 @@ function sendToWhatsApp() {
         message = `Hola, tengo el Little Pet Shop: ${selectedProduct.name}`;
     }
     
-    // Encode message for URL
     const encodedMessage = encodeURIComponent(message);
     
-    // WhatsApp Web URL
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     
-    // Open in new tab
     window.open(whatsappURL, '_blank');
     
-    // Close modal
     closeModal();
 }
 
-// ============================================
-// ANIMACIÓN CARA TRISTE (BOTÓN NO)
-// ============================================
 
 function showSadFace() {
     if (!sadFaceOverlay) return;
     
-    // Reinicia el temporizador si se presiona NO varias veces seguidas
     clearTimeout(sadFaceTimer);
     
     sadFaceOverlay.classList.add('active');
     
     sadFaceTimer = setTimeout(() => {
         sadFaceOverlay.classList.remove('active');
-    }, 2000); // Tiempo visible en pantalla (ms). Ajusta este número si quieres más o menos duración.
+    }, 2000);
 }
 
 function attachEventListeners() {
-    // Navigation buttons
+    
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
             const section = button.getAttribute('data-section');
             changeSection(section);
-            // Close mobile menu when section is selected
             if (mobileMenu) {
                 closeMobileMenu();
             }
         });
     });
     
-    // Modal close
+
     modalClose.addEventListener('click', closeModal);
     
-    // Modal overlay click
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) {
             closeModal();
         }
     });
     
-    // YES button
     btnYes.addEventListener('click', sendToWhatsApp);
     
-    // NO button - now also shows sad face
     btnNo.addEventListener('click', () => {
         showSadFace();
         closeModal();
     });
     
-    // Keyboard close (ESC)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
             closeModal();
         }
     });
     
-    // Photo modal close
     photoModalClose.addEventListener('click', closePhotoModal);
     
-    // Photo modal overlay click
     photoModalOverlay.addEventListener('click', (e) => {
         if (e.target === photoModalOverlay) {
             closePhotoModal();
         }
     });
     
-    // Photo zoom buttons
     photoZoomInBtn.addEventListener('click', zoomInPhoto);
     photoZoomOutBtn.addEventListener('click', zoomOutPhoto);
     photoZoomResetBtn.addEventListener('click', resetPhotoZoom);
     
-    // Keyboard close for photo modal (ESC)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && photoModalOverlay.classList.contains('active')) {
             closePhotoModal();
@@ -424,7 +387,6 @@ function changeSection(section) {
     
     currentSection = section;
     
-    // Update active button
     navButtons.forEach(button => {
         button.classList.remove('nav-button--active');
         if (button.getAttribute('data-section') === section) {
@@ -432,7 +394,6 @@ function changeSection(section) {
         }
     });
     
-    // Update title
     const sectionLabels = {
         lps: 'LPS',
         accesorios: 'ACCESORIOS',
@@ -442,43 +403,32 @@ function changeSection(section) {
     };
     sectionTitle.textContent = sectionLabels[section];
     
-    // Efecto de brillo solo para LPS, ACCESORIOS y OTROS (SE PERMUTA queda igual que siempre)
     const sectionsWithShine = ['lps', 'accesorios', 'otros'];
     sectionTitle.classList.toggle('section-title--shine', sectionsWithShine.includes(section));
     
     
-    // Reset grid class if coming from photos
     if (section !== 'fotos') {
         productsGrid.className = 'grid';
     }
     
-    // Render new products
     renderProducts();
     
-    // Scroll to products
     productsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 
-// ============================================
-// MOBILE MENU FUNCTIONALITY
-// ============================================
-
 function initMobileMenu() {
     if (!hamburgerMenu || !mobileMenu) return;
     
-    // Toggle menu on hamburger click
     hamburgerMenu.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleMobileMenu();
     });
     
-    // Close menu on backdrop click
     if (mobileMenuBackdrop) {
         mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
     }
     
-    // Handle mobile menu items
     mobileMenuItems.forEach(item => {
         item.addEventListener('click', () => {
             const section = item.getAttribute('data-section');
@@ -489,7 +439,6 @@ function initMobileMenu() {
         });
     });
     
-    // Handle WhatsApp menu item
     if (mobileMenuWhatsApp) {
         mobileMenuWhatsApp.addEventListener('click', (e) => {
             e.preventDefault();
@@ -498,7 +447,6 @@ function initMobileMenu() {
         });
     }
     
-    // Close menu on ESC key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
             closeMobileMenu();
@@ -534,17 +482,15 @@ function closeMobileMenu() {
 
 function openWhatsAppFromMenu() {
     const phoneNumber = WHATSAPP_PHONE;
-    const message = encodeURIComponent('Hola, me interesa en los Little Pet Shop que tienes. 😊');
+    const message = encodeURIComponent('Hola, me interesa el Little Pet Shop que tienes.');
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappURL, '_blank');
 }
 
-// Detect if running on mobile
 function isMobile() {
     return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-// Handle orientation change
 window.addEventListener('orientationchange', () => {
     if (modalOverlay.classList.contains('active')) {
         closeModal();
@@ -554,16 +500,15 @@ window.addEventListener('orientationchange', () => {
     }
 });
 
-// Handle window resize for responsive behavior
 let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-        // Any resize-specific logic here
+
     }, 250);
 });
 
-// Use requestAnimationFrame for smooth animations
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(() => {
@@ -582,7 +527,6 @@ function setupLazyLoading() {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const image = entry.target;
-                    // Load image logic here
                     observer.unobserve(image);
                 }
             });
@@ -591,8 +535,6 @@ function setupLazyLoading() {
     }
 }
 
-
-// Track section changes for analytics
 function trackSectionChange(section) {
     if (typeof gtag !== 'undefined') {
         gtag('event', 'section_view', {
@@ -601,7 +543,6 @@ function trackSectionChange(section) {
     }
 }
 
-// Track product selection
 function trackProductSelection(productName) {
     if (typeof gtag !== 'undefined') {
         gtag('event', 'product_selected', {
@@ -615,12 +556,6 @@ console.log('Little Pet Shop Catalog loaded successfully');
 console.log('Sections available:', Object.keys(products));
 console.log('Total products:', Object.values(products).reduce((sum, arr) => sum + arr.length, 0));
 
-
-// ============================================
-// ARRASTRAR PARA VER LA FOTO AMPLIADA (cuando hay zoom aplicado)
-// Usa las variables photoIsDragging / photoDragStart / photoOffset
-// que ya estaban declaradas arriba, y updatePhotoZoom() ya existente.
-// ============================================
 
 function attachPhotoDragListeners() {
     if (!photoZoomImage) return;
@@ -668,12 +603,6 @@ function attachPhotoDragListeners() {
 }
 
 attachPhotoDragListeners();
-
-
-// ============================================
-// EVENTOS TEMPORALES (HALLOWEEN / NAVIDAD)
-// Se controlan con las constantes HALLOWEEN y NAVIDAD del inicio del archivo
-// ============================================
 
 const EVT_ART = {
     bat: '<svg viewBox="0 0 48 24"><path d="M24 7c1.4 0 2.2 1.2 2.4 2.8L28 8.6c2-2.6 6.4-4.2 11.6-3.4-2.2 1.6-3.4 3.6-3.6 6-2-1.2-4-.8-5.2 1-1-1.4-3-1.6-4.4-.2L24 18l-2.4-6c-1.4-1.4-3.4-1.2-4.4.2-1.2-1.8-3.2-2.2-5.2-1-.2-2.4-1.4-4.4-3.6-6C13.6 4.4 18 6 20 8.6l1.6 1.2C21.8 8.2 22.6 7 24 7z"/></svg>',
