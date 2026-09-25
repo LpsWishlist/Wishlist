@@ -1,5 +1,5 @@
 const HALLOWEEN = false;
-const NAVIDAD = true;
+const NAVIDAD = false;
 
 const products = {
     lps: [
