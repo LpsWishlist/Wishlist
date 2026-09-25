@@ -1,7 +1,4 @@
-// ============================================
-// EVENTOS TEMPORALES: cambia a true para activar
-// ============================================
-const HALLOWEEN = false;
+const HALLOWEEN = true;
 const NAVIDAD = false;
 
 const products = {
