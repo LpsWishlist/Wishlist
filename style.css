@@ -64,9 +64,6 @@ body {
     overflow-x: hidden;
 }
 
-/* ============================================
-   ANIMACIÓN DE ONDA SUTIL EN FONDO
-   ============================================ */
 
 body::before {
     content: '';
@@ -468,10 +465,6 @@ body::before {
     box-shadow: 0 0 0 3px rgba(201, 123, 161, 0.3);
 }
 
-/* ============================================
-   MODAL DE FOTOS - Estilos adicionales
-   ============================================ */
-
 .photo-modal-overlay {
     display: none;
     position: fixed;
@@ -742,9 +735,6 @@ body::before {
     }
 }
 
-/* ============================================
-   RESPONSIVE - FLOATING TIP
-   ============================================ */
 
 @media (max-width: 768px) {
     .floating-tip {
@@ -783,21 +773,16 @@ body::before {
 }
 
 #modal-image {
-    width: 150px;       /* Ancho perfecto para que no se vea gigante */
-    height: 150px;      /* Alto proporcional */
-    object-fit: cover;  /* Hace que la foto se adapte sin deformarse */
-    border-radius: var(--radius-md); /* Le da bordes suaves como tus tarjetas */
-    margin-bottom: 1.5rem; /* Separa la foto del título del producto */
+    width: 150px;       
+    height: 150px;      
+    object-fit: cover;  
+    border-radius: var(--radius-md); 
+    margin-bottom: 1.5rem; 
 }
 
-/* ============================================
-   EFECTO DE BRILLO EN TÍTULOS (LPS, ACCESORIOS, OTROS)
-   Se activa/desactiva vía JS agregando/quitando esta clase
-   sobre #section-title. SE PERMUTA y FOTOS no la usan.
-   ============================================ */
 
 .section-title--shine {
-    color: var(--color-primary); /* fallback si el navegador no soporta el degradado en texto */
+    color: var(--color-primary); 
     background-image: linear-gradient(
         100deg,
         var(--color-primary) 35%,
@@ -818,12 +803,6 @@ body::before {
         background-position: -250% 0;
     }
 }
-
-/* ============================================
-   ANIMACIÓN "CARA TRISTE" AL PRESIONAR NO
-   Overlay independiente del modal: no cubre ni modifica
-   las imágenes/productos ni el resto de la sección.
-   ============================================ */
 
 .sad-face-overlay {
     position: fixed;
@@ -857,10 +836,6 @@ body::before {
 .sad-face-overlay.active .sad-face-image {
     transform: translateY(0) scale(1);
 }
-
-/* ============================================
-   HAMBURGER MENU PARA MÓVIL
-   ============================================ */
 
 .hamburger-menu {
     display: none;
@@ -1014,10 +989,6 @@ body::before {
     display: block;
 }
 
-/* ============================================
-   RESPONSIVE - HORIZONTAL SCROLL SNAP Y HAMBURGER
-   ============================================ */
-
 @media (max-width: 768px) {
     .nav {
         flex-wrap: nowrap;
@@ -1081,10 +1052,6 @@ body::before {
     }
 }
 
-/* ============================================
-   ANIMACIONES GENERALES
-   ============================================ */
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -1136,10 +1103,6 @@ body::before {
     }
 }
 
-/* ============================================
-   MENÚ ☰ VISIBLE EN TODOS LOS DISPOSITIVOS (PC, TABLET Y CELULAR)
-   ============================================ */
-
 .hamburger-menu {
     display: flex;
 }
@@ -1148,10 +1111,6 @@ body::before {
     display: block;
 }
 
-/* ============================================
-   EVENTOS TEMPORALES (HALLOWEEN / NAVIDAD)
-   Solo se activan con las constantes de script.js
-   ============================================ */
 
 body.evt-halloween .header,
 body.evt-navidad .header {
